@@ -1,0 +1,144 @@
+Bibliography
+Research on Early Life and Aging Trends and Effects (RELATE): A Cross-
+National Study
+
+This bibliography includes published and unpublished works that are related 
+to ICPSR study 34241. It includes works that are based on primary
+or secondary analysis of the data, or which describe or critique those
+data or the collection methodology. 
+
+If you publish a work or know of other works that are based on these data,
+please send the complete citation and name of the ICPSR study used to:
+icpsr-biblio-notify@umich.edu 
+
+
+1. Assari, S.; Lankarani, M.M., "Does multi-morbidity mediate the effect of
+socioeconomics on self-rated health? Cross-country differences."
+International Journal of Preventive Medicine. 2015, 6, (85),. DOI:
+10.4103/2008-7802.164413
+
+2. Assari, Shervin, "Cross-country differences in the additive effects of
+socioeconomics, health behaviors and medical comorbidities on disability
+among older adults with heart disease." Journal of Tehran University Heart
+Center. 2015, 10, (1), 24 - 33.
+
+3. Assari, Shervin; Lankarani, Reza M.; Lankarani, Maryam M., "Cross-
+country differences in the association between diabetes and disability."
+Journal of Diabetes and Metabolic Disorders. Jan 2014, 13, (3),. DOI:
+10.1186/2251-6581-13-3
+
+4. Assari, Shervin; Moghani Lankarani, Maryam, "Association between heart
+disease and subjective health in ten North, Middle, and South American
+countries." International Journal of Travel Medicine and Global Health. Aut
+2014, 2, (4), 141 - 147.
+
+5. McEniry, M.; McDermott, J., "Early-life conditions, rapid demographic
+changes, and older adult health in the developing world." Biodemography and
+Social Biology. May 2015, 61, (2), 147 - 166. DOI:
+10.1080/19485565.2015.1047488
+
+6. McEniry, Mary, "Data sources, measures, validity, and a description of
+the older adult population." In Early Life Conditions and Rapid Demographic
+Changes in the Developing World. 69 - 104, Dordrecht, Netherlands: Springer
+Science and Business Media,2014.
+Abstract: http://link.springer.com/chapter/10.1007/978-94-007-6979-3_3
+
+7. McEniry, Mary, Early Life Conditions and Rapid Demographic Changes in
+the Developing World: Consequences for Older Adult Health. Dordrecht,
+Netherlands: Springer Science and Business Media, 2014. DOI: 10.1007/978-
+94-007-6979-3
+Abstract: http://www.springer.com/social+sciences/population+studies/book/978-94-007-6978-6
+
+8. McEniry, Mary; Zhou, Zhangjun, "SES Disparities in Obesity, Diabetes,
+and Hypertension
+among Older Adults in Low and Middle Income Countries." Population Studies
+Center Research Report 15-841. Ann Arbor, MI: University of Michigan,
+Institute for Social Research, Jul 2015.
+Full text PDF: http://www.psc.isr.umich.edu/pubs/pdf/rr15-841.pdf
+Low and middle income countries experienced rapid demographic changes and
+increased life
+expectancy during the 1930s-1960s, mainly because of public health
+interventions and medical
+innovations. Increasingly larger groups of survivors of poor early life
+conditions continued to
+live in poor socioeconomic conditions which continued to produce a stunted
+population. Older
+adults from these cohorts may now exhibit sharper SES health inequalities
+due to being less
+socially mobile as a result of early life conditions. Drawing from a subset
+of the harmonized
+cross national RELATE data (n=160,661), we examined the degree to which
+this conjecture has
+merit by comparing SES health disparities according to adult height for
+measured obesity, selfreported
+diabetes, and measured hypertension in older adults from low and middle
+income
+countries born in the 1930s through the mid-1940s and living in urban
+areas. We benchmarked
+results using data from the US and England. A positive education gradient
+appeared for obesity
+in taller individuals but there was no significant gradient for shorter
+individuals; sharper
+positive gradients appeared for diabetes for shorter individuals; and no
+significant association
+appeared for hypertension for individuals of any height. In contrast, the
+US and England
+showed significant negative gradients for education across all health
+outcomes. The results show
+the overall importance of early life conditions in adult health,
+particularly for obesity, across all
+developing countries, in contrast with US and England. However, the results
+do not produce
+convincing evidence of the conjecture regarding sharper SES inequalities in
+the cohorts born
+during the 1930s-1940s. Nevertheless, because obesity is a strong predictor
+of diabetes and
+hypertension, the results may forecast what is to come for the health of
+cohorts born in the later
+period of the 1930s-1960s.
+
+9. Patel, Pankaj C.; Devaraj, Srikant, "Height-income association in
+developing countries: Evidence from 14 countries." American Journal of
+Human Biology. in press 2018, e23093. DOI: 10.1002/ajhb.23093
+Full text PDF: http://www.psc.isr.umich.edu/pubs/pdf/rr15-841.pdf
+Low and middle income countries experienced rapid demographic changes and
+increased life
+expectancy during the 1930s-1960s, mainly because of public health
+interventions and medical
+innovations. Increasingly larger groups of survivors of poor early life
+conditions continued to
+live in poor socioeconomic conditions which continued to produce a stunted
+population. Older
+adults from these cohorts may now exhibit sharper SES health inequalities
+due to being less
+socially mobile as a result of early life conditions. Drawing from a subset
+of the harmonized
+cross national RELATE data (n=160,661), we examined the degree to which
+this conjecture has
+merit by comparing SES health disparities according to adult height for
+measured obesity, selfreported
+diabetes, and measured hypertension in older adults from low and middle
+income
+countries born in the 1930s through the mid-1940s and living in urban
+areas. We benchmarked
+results using data from the US and England. A positive education gradient
+appeared for obesity
+in taller individuals but there was no significant gradient for shorter
+individuals; sharper
+positive gradients appeared for diabetes for shorter individuals; and no
+significant association
+appeared for hypertension for individuals of any height. In contrast, the
+US and England
+showed significant negative gradients for education across all health
+outcomes. The results show
+the overall importance of early life conditions in adult health,
+particularly for obesity, across all
+developing countries, in contrast with US and England. However, the results
+do not produce
+convincing evidence of the conjecture regarding sharper SES inequalities in
+the cohorts born
+during the 1930s-1940s. Nevertheless, because obesity is a strong predictor
+of diabetes and
+hypertension, the results may forecast what is to come for the health of
+cohorts born in the later
+period of the 1930s-1960s.

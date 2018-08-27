@@ -1,0 +1,601 @@
+File Manifest for ICPSR 34241
+
+McEniry, Mary. Research on Early Life and Aging Trends and Effects
+(RELATE): A Cross-National Study. ICPSR34241-v2. Ann Arbor, MI: Inter-
+university Consortium for Political and Social Research [distributor],
+2015-05-07. http://doi.org/10.3886/ICPSR34241.v2
+
+Details on the version history can be found below the file listings.
+
+
+Study-level Documentation
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-descriptioncitation.pdf       -       -         -       2016-07-08  -
+
+    34241-related_literature.txt        -       -         -       daily       -
+
+    34241-manifest.txt                  -       -         -       daily       -
+
+    34241-User_guide.pdf                -       -         -       2015-05-07  9bd86e1302857c3d6b18487aca1309c7
+
+
+DS0001 Harmonized Cross-national RELATE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0001-Codebook.pdf             -       -         -       2015-05-07  9f08f446825ea724b30c3f81d7cec251
+
+    34241-0001-Data.dta                 -       88,273    137     2015-05-07  066f60760a155c9c3ec0eeb241aad47d
+
+    34241-0001-Data.rda                 -       88,273    137     2015-05-07  2d1d67fe00b5fe449d1d9addf83bf9a1
+
+    34241-0001-Data.sav                 -       88,273    137     2015-05-07  d27e259c367d3badc8666442129046eb
+
+    34241-0001-Data.stc                 -       88,273    137     2015-05-07  e222fb4cae81fa578962b56f3cb0692a
+
+    34241-0001-Data.tsv                 -       88,273    137     2015-05-07  e89a10423dde88a2c03edcd796b53b61
+
+    34241-0001-Data.txt                 385     88,273    137     2015-05-07  cc1797e6629341c26815402d17b5898c
+
+    34241-0001-Setup.dct                -       -         -       2015-05-07  617b16ed964c237046975bef76dcee67
+
+    34241-0001-Setup.do                 -       -         -       2015-05-07  3c448afdb84dc481666554bdac19944e
+
+    34241-0001-Setup.sas                -       -         -       2015-05-07  ca8e489ee6976729124f1de35a9a7e92
+
+    34241-0001-Setup.sps                -       -         -       2015-05-07  4b2d6e26b800253be22b15c834d83b9c
+
+    34241-0001-Supplemental_syntax.do   -       -         -       2015-05-07  bedacbf0c5825658d5bc239cf85274fb
+
+    34241-0001-Supplemental_syntax.sas  -       -         -       2015-05-07  83a09b2f3af84fadab6ac39b4ce59af7
+
+
+DS0002 Costa Rica Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0002-Data.dta                 -       2,827     167     2013-06-12  8d5b2a30248d30612d1b40e7884d92c9
+
+    34241-0002-Data.rda                 -       2,827     167     2013-06-12  d92bfaa89cd7579c41bf8ee1783b8283
+
+    34241-0002-Data.sav                 -       2,827     167     2013-06-12  34197e4b454e3bb16518d3d840dfbdfe
+
+    34241-0002-Data.stc                 -       2,827     167     2013-06-12  9edc8ee1c9fe90991de16a458ced3bea
+
+    34241-0002-Data.tsv                 -       2,827     167     2013-06-12  d374a0a9a5694d41348854c550fc358f
+
+    34241-0002-Data.txt                 1288    2,827     167     2013-06-12  1890941c70ee586abb56ba8a9f11dc86
+
+    34241-0002-Setup.dct                -       -         -       2013-06-12  c30a4cadae883f3db57ec6a52c2c1d33
+
+    34241-0002-Setup.do                 -       -         -       2013-06-12  7aadc7b0e920b58d363b091f8530db3c
+
+    34241-0002-Setup.sas                -       -         -       2013-06-12  fc6b6066f4780567f6461de7b3705068
+
+    34241-0002-Setup.sps                -       -         -       2013-06-12  bd54bc23d232366a8ef82bffc5b2409a
+
+    34241-0002-Supplemental_syntax.do   -       -         -       2013-06-12  0747502328ac097e47f6c6174fbb36e9
+
+    34241-0002-Supplemental_syntax.sas  -       -         -       2013-06-12  1fd1605fd72e0cdc188a1b49ac590693
+
+
+DS0003 Puerto Rico Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0003-Data.dta                 -       4,291     422     2013-06-12  10bccd3e0609e0b621121634d857b554
+
+    34241-0003-Data.rda                 -       4,291     422     2013-06-12  a707dc5485100ddfe6dd69e5adf44515
+
+    34241-0003-Data.sav                 -       4,291     422     2013-06-12  3fa3909da08ce9eb9871706681e7a8b2
+
+    34241-0003-Data.stc                 -       4,291     422     2013-06-12  33339efbc419ccfe570141af824b1229
+
+    34241-0003-Data.tsv                 -       4,291     422     2013-06-12  87d47a7f372c1f4d69a3e5803ee5b019
+
+    34241-0003-Data.txt                 3153    4,291     422     2013-06-12  88caa65e6031aed390306c3e58f9e400
+
+    34241-0003-Setup.dct                -       -         -       2013-06-12  6978825cbba5f86ea7e1f6452d5767b8
+
+    34241-0003-Setup.do                 -       -         -       2013-06-12  7da832f133de403e4e88b74c566aa5c9
+
+    34241-0003-Setup.sas                -       -         -       2013-06-12  f03ac76db0f46d4078f4709bde877be0
+
+    34241-0003-Setup.sps                -       -         -       2013-06-12  bdc8846adf475ce1c9e02b35a2bfd240
+
+    34241-0003-Supplemental_syntax.do   -       -         -       2013-06-12  623958dfde196a223dea99e5e9d2c072
+
+    34241-0003-Supplemental_syntax.sas  -       -         -       2013-06-12  757e3f927efd08dcc403cb5d80d86db2
+
+
+DS0004 United States (Wisconsin) Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0004-Data.dta                 -       10,317    267     2013-06-12  c1f1d615d20fbc364f5d7715b20ef6ea
+
+    34241-0004-Data.rda                 -       10,317    267     2013-06-12  31597a58aa1926786892a371800c0494
+
+    34241-0004-Data.sav                 -       10,317    267     2013-06-12  1d2bbc80001747b4202eb114282a31b5
+
+    34241-0004-Data.stc                 -       10,317    267     2013-06-12  9d3de9fd7a803b900819c08573b19caf
+
+    34241-0004-Data.tsv                 -       10,317    267     2013-06-12  122e2029e9249ff63a92fd04bb5c7c6d
+
+    34241-0004-Data.txt                 2035    10,317    267     2013-06-12  c7937d9322790dd3fc6f367045dc2fdb
+
+    34241-0004-Setup.dct                -       -         -       2013-06-12  2afee85af3e33b101c76dbebdad8b9b4
+
+    34241-0004-Setup.do                 -       -         -       2013-06-12  bd389acd24533bc4882df9998811eb8a
+
+    34241-0004-Setup.sas                -       -         -       2013-06-12  2d0b7751145a849878615bbf962280ad
+
+    34241-0004-Setup.sps                -       -         -       2013-06-12  a2522f3f6a6ef5b0f0d3849490ac8270
+
+    34241-0004-Supplemental_syntax.do   -       -         -       2013-06-12  246cc03e0f0282c0e4ecfb6db06c5d48
+
+    34241-0004-Supplemental_syntax.sas  -       -         -       2013-06-12  a2f240d9f0a7115df3904564bd53d06b
+
+
+DS0005 Argentina SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0005-Data.dta                 -       1,043     168     2013-06-12  0eb82f8fa0f5c9eb849247ec9ef54ea2
+
+    34241-0005-Data.rda                 -       1,043     168     2013-06-12  0032fa6a193cffa3ee8b4d5745924efb
+
+    34241-0005-Data.sav                 -       1,043     168     2013-06-12  531538faa8c98cb1a927beaf4fa393f4
+
+    34241-0005-Data.stc                 -       1,043     168     2013-06-12  ac157b47fe947a8902ff55a8894128aa
+
+    34241-0005-Data.tsv                 -       1,043     168     2013-06-12  49296595b110ba11373c2a2b21bc1f65
+
+    34241-0005-Data.txt                 1375    1,043     168     2013-06-12  4a9a43b7137db58fa9cdc4839e7fc3b7
+
+    34241-0005-Setup.dct                -       -         -       2013-06-12  81dd5bb9c1c167f8ef2585aaf16ce8e5
+
+    34241-0005-Setup.do                 -       -         -       2013-06-12  9196bb3ffc6b0d367fe083e47a3f9ebb
+
+    34241-0005-Setup.sas                -       -         -       2013-06-12  c18fb0b27ad8aa5df876f8ec9348a4fa
+
+    34241-0005-Setup.sps                -       -         -       2013-06-12  69f487a5cc5023bded6f16bf41f5a8d4
+
+    34241-0005-Supplemental_syntax.do   -       -         -       2013-06-12  1b17bd1ee99f18e0d42004fba95f447a
+
+    34241-0005-Supplemental_syntax.sas  -       -         -       2013-06-12  4ad6427c7ab141474a56204407db8f28
+
+
+DS0006 Barbados SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0006-Data.dta                 -       1,508     187     2013-06-12  4f0440a2c8fa006943a5320e4f4e4deb
+
+    34241-0006-Data.rda                 -       1,508     187     2013-06-12  25626d5096c6ef09d5aef4746bbf223c
+
+    34241-0006-Data.sav                 -       1,508     187     2013-06-12  5daf3ca4ac5f68140816f92180b56224
+
+    34241-0006-Data.stc                 -       1,508     187     2013-06-12  27a5ac1bf74ba42f967bee04fa12d036
+
+    34241-0006-Data.tsv                 -       1,508     187     2013-06-12  7c9493bed1007af64b1e1f35910c151d
+
+    34241-0006-Data.txt                 1659    1,508     187     2013-06-12  6b65e4679eb40ba47ed4053560fe889a
+
+    34241-0006-Setup.dct                -       -         -       2013-06-12  81de445e89ad8093fcfcf6ec378aef99
+
+    34241-0006-Setup.do                 -       -         -       2013-06-12  d91a9f04f0ca27d71d713b9cfab0ad3b
+
+    34241-0006-Setup.sas                -       -         -       2013-06-12  5cfcb7296d5191ddbb4aaa04e13c8f8d
+
+    34241-0006-Setup.sps                -       -         -       2013-06-12  8f8113ead81538bae0254c3ff23345ec
+
+    34241-0006-Supplemental_syntax.do   -       -         -       2013-06-12  dfadc45dcfcd7dcbd5515f910f19ae20
+
+    34241-0006-Supplemental_syntax.sas  -       -         -       2013-06-12  c8b6d243b2e0c4604cf71a9ec7dc2f25
+
+
+DS0007 Brazil SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0007-Data.dta                 -       2,143     187     2013-06-12  79b6f4228befb18a03d8a0df6dd07b7b
+
+    34241-0007-Data.rda                 -       2,143     187     2013-06-12  6ce0eea709feb06aaa34114461feb20f
+
+    34241-0007-Data.sav                 -       2,143     187     2013-06-12  1e4ad30a39112c1185e4c5f7e4617af4
+
+    34241-0007-Data.stc                 -       2,143     187     2013-06-12  4c668628194ed72cda23f3feb066486a
+
+    34241-0007-Data.tsv                 -       2,143     187     2013-06-12  afa8bf9ee4cb86533ed4d85259cd3ae5
+
+    34241-0007-Data.txt                 1532    2,143     187     2013-06-12  a1a3dac37a13093ab1c65578fc2b8221
+
+    34241-0007-Setup.dct                -       -         -       2013-06-12  0d53aafccbbf28265ea26c20ec452f3d
+
+    34241-0007-Setup.do                 -       -         -       2013-06-12  f284e1b7e9ba374b1424f0345cfbf5f0
+
+    34241-0007-Setup.sas                -       -         -       2013-06-12  7fab4a7353f0ffcf0ccf3c02b7172322
+
+    34241-0007-Setup.sps                -       -         -       2013-06-12  65cc39362a5b10cdc12a278dfbee1706
+
+    34241-0007-Supplemental_syntax.do   -       -         -       2013-06-12  c8532ffffa39b93fbba8ece80e5dceac
+
+    34241-0007-Supplemental_syntax.sas  -       -         -       2013-06-12  53397649fd94bc75a4ed1383e71aa5ae
+
+
+DS0008 Chile SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0008-Data.dta                 -       1,301     178     2013-06-12  f6f1b8e5740a6e35945e3b6ca427794b
+
+    34241-0008-Data.rda                 -       1,301     178     2013-06-12  9f80a6eab20d4df9bcd72c5fcc04ccb4
+
+    34241-0008-Data.sav                 -       1,301     178     2013-06-12  a8f0e9ef07aecbc1ef8bb072c4f17cae
+
+    34241-0008-Data.stc                 -       1,301     178     2013-06-12  3952e3d1e41614c96ebda5fe65420ace
+
+    34241-0008-Data.tsv                 -       1,301     178     2013-06-12  8ca8fc025093da13e0cc834801e8419b
+
+    34241-0008-Data.txt                 1513    1,301     178     2013-06-12  81ba8f0e77435f686cfa5b475f63f5c6
+
+    34241-0008-Setup.dct                -       -         -       2013-06-12  5476dcd6a233e43f01a7a4252bf9e5d9
+
+    34241-0008-Setup.do                 -       -         -       2013-06-12  6181305bc5af08a6508563dd1766ca0b
+
+    34241-0008-Setup.sas                -       -         -       2013-06-12  df6777e02c3f74ce44657353b62bdce4
+
+    34241-0008-Setup.sps                -       -         -       2013-06-12  de5d78d232afe937c63ddaeb33b0702f
+
+    34241-0008-Supplemental_syntax.do   -       -         -       2013-06-12  759458709704dba99f6b5260a53d7d1f
+
+    34241-0008-Supplemental_syntax.sas  -       -         -       2013-06-12  d1fa18a50abde356c17732a96236ed9e
+
+
+DS0009 Cuba SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0009-Data.dta                 -       1,905     193     2013-06-12  e2aa50b936ec7a78f1d92b5983d5d60b
+
+    34241-0009-Data.rda                 -       1,905     193     2013-06-12  8355807e5f5f9320bb587b96f0c5c491
+
+    34241-0009-Data.sav                 -       1,905     193     2013-06-12  78247bf6a78566fbe14dfc305b261ed1
+
+    34241-0009-Data.stc                 -       1,905     193     2013-06-12  166d50014da71876704a3b1084e62e72
+
+    34241-0009-Data.tsv                 -       1,905     193     2013-06-12  09d1f3434e293e994c681f67ad4d390b
+
+    34241-0009-Data.txt                 1580    1,905     193     2013-06-12  b97b9d8822a4affbbad47ab6b04bc513
+
+    34241-0009-Setup.dct                -       -         -       2013-06-12  e82a6d4358dd8467b71ff32fbfd42ee7
+
+    34241-0009-Setup.do                 -       -         -       2013-06-12  8610b9ff4d7c54eeb860430fe6add449
+
+    34241-0009-Setup.sas                -       -         -       2013-06-12  ba4df9e10d26a792b28703463036187c
+
+    34241-0009-Setup.sps                -       -         -       2013-06-12  26a5fe89affbc458f4fa9c55e9e2d865
+
+    34241-0009-Supplemental_syntax.do   -       -         -       2013-06-12  40a11af2d087926ebcdfd925cbd7c385
+
+    34241-0009-Supplemental_syntax.sas  -       -         -       2013-06-12  b1bc7108214f506146104d429c033ea5
+
+
+DS0010 Mexico SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0010-Data.dta                 -       1,247     186     2013-06-12  987b3f078c52e0b7c45d737f499a36aa
+
+    34241-0010-Data.rda                 -       1,247     186     2013-06-12  698ffc2ffab200baa843d0aa641b1edb
+
+    34241-0010-Data.sav                 -       1,247     186     2013-06-12  3d5d60ae6c40ce1fdcb3ff737f5f5cd7
+
+    34241-0010-Data.stc                 -       1,247     186     2013-06-12  a45d7b432585a2868c7fc31461a8b142
+
+    34241-0010-Data.tsv                 -       1,247     186     2013-06-12  0ed795a255183008fdac77009589357d
+
+    34241-0010-Data.txt                 1621    1,247     186     2013-06-12  3be6583f292fc6584783930dc2c86425
+
+    34241-0010-Setup.dct                -       -         -       2013-06-12  dfc59fd30c7b9270a1b4f2ff23eb93e8
+
+    34241-0010-Setup.do                 -       -         -       2013-06-12  c58a04a1a368067a746e8837300e3e3e
+
+    34241-0010-Setup.sas                -       -         -       2013-06-12  981501033bbe9f24afb534450ce72031
+
+    34241-0010-Setup.sps                -       -         -       2013-06-12  c37805b5ae7b837c66e64b25b4bde74b
+
+    34241-0010-Supplemental_syntax.do   -       -         -       2013-06-12  596790bb3d9cf292413d99a9216de7ce
+
+    34241-0010-Supplemental_syntax.sas  -       -         -       2013-06-12  720299607f3c7fdeff57a2c8556962bf
+
+
+DS0011 Uruguay SABE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0011-Data.dta                 -       1,450     185     2013-06-12  63b855e2ce79bf38a3cb87403f08522b
+
+    34241-0011-Data.rda                 -       1,450     185     2013-06-12  6489dc5bf0713f88c1fe7e15c5452539
+
+    34241-0011-Data.sav                 -       1,450     185     2013-06-12  346730d42a7ed6c2a83ce6d64afaf880
+
+    34241-0011-Data.stc                 -       1,450     185     2013-06-12  74f72e88f01fbda770b259da169549f9
+
+    34241-0011-Data.tsv                 -       1,450     185     2013-06-12  b6732f5aafca3bb525825bc93a32f9d9
+
+    34241-0011-Data.txt                 1628    1,450     185     2013-06-12  93bb68607d14bec7308f6f02afa38437
+
+    34241-0011-Setup.dct                -       -         -       2013-06-12  24993baed0536bfbd3af7d0a828658c6
+
+    34241-0011-Setup.do                 -       -         -       2013-06-12  4adc60520f56bcacfdfe0ee71b2c541e
+
+    34241-0011-Setup.sas                -       -         -       2013-06-12  adb52ec6d8c23214151093548248599c
+
+    34241-0011-Setup.sps                -       -         -       2013-06-12  86d6327127e0b218b0e70892fa420a4b
+
+    34241-0011-Supplemental_syntax.do   -       -         -       2013-06-12  20970f29104287715f765b962154d90f
+
+    34241-0011-Supplemental_syntax.sas  -       -         -       2013-06-12  fc33a4d45fc12b7c8e60324856acc50c
+
+
+DS0012 China SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0012-Data.dta                 -       13,368    334     2013-06-12  af38794197f0ef5b14d61433e5860c6c
+
+    34241-0012-Data.rda                 -       13,368    334     2013-06-12  1a74bed1febf0c6f1399a73b94401abd
+
+    34241-0012-Data.sav                 -       13,368    334     2013-06-12  4af7d75e6f02ba585ebe55acd97b514f
+
+    34241-0012-Data.stc                 -       13,368    334     2013-06-12  d3bcc6fb138b776a0883b287291937f9
+
+    34241-0012-Data.tsv                 -       13,368    334     2013-06-12  013eae56f1933d98262186e9db03aaaf
+
+    34241-0012-Data.txt                 3890    13,368    334     2013-06-12  054c038574cb527c35419b8b1623b20f
+
+    34241-0012-Setup.dct                -       -         -       2013-06-12  a11abe1d7e1b8d2d61b15c9d0e838cf4
+
+    34241-0012-Setup.do                 -       -         -       2013-06-12  d44b84040f60a41439f44ec3bc0d1faf
+
+    34241-0012-Setup.sas                -       -         -       2013-06-12  cb11338873ab5e3e9c2e1d7683e4625b
+
+    34241-0012-Setup.sps                -       -         -       2013-06-12  9531c8ff6db148a2d988a924ab851efa
+
+    34241-0012-Supplemental_syntax.do   -       -         -       2013-06-12  30e809a995710e780e270d5f6c60477c
+
+    34241-0012-Supplemental_syntax.sas  -       -         -       2013-06-12  82607416fa7a6c85c3bc295bf6bf704d
+
+
+DS0013 Ghana SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0013-Data.dta                 -       4,724     348     2013-06-12  438fa03077314c7b8c131d617e44d338
+
+    34241-0013-Data.rda                 -       4,724     348     2013-06-12  1e4a507610f698c64ea6808a80f651f3
+
+    34241-0013-Data.sav                 -       4,724     348     2013-06-12  9981d4c5edd5d5372540d07303c83817
+
+    34241-0013-Data.stc                 -       4,724     348     2013-06-12  f972c51edcc4c23933087b1bd0eeec98
+
+    34241-0013-Data.tsv                 -       4,724     348     2013-06-12  ae215b0672d6754cf0709c9b7a334a73
+
+    34241-0013-Data.txt                 4034    4,724     348     2013-06-12  c519c1314e8aafee2dbd8572cf3b6ddf
+
+    34241-0013-Setup.dct                -       -         -       2013-06-12  c266fb9dfa70d19dd56f7c8786109905
+
+    34241-0013-Setup.do                 -       -         -       2013-06-12  46f0e96137fcca35ea83323620a7daa4
+
+    34241-0013-Setup.sas                -       -         -       2013-06-12  8927c658c8f66d2715bb71353993e56a
+
+    34241-0013-Setup.sps                -       -         -       2013-06-12  777728cbf5190b59035747d7cbf5ef80
+
+    34241-0013-Supplemental_syntax.do   -       -         -       2013-06-12  4a6ea04d30648dd6bf8f567d4d6159cd
+
+    34241-0013-Supplemental_syntax.sas  -       -         -       2013-06-12  a4f1bf0d434a013e414920ba20b4c159
+
+
+DS0014 India SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0014-Data.dta                 -       7,150     350     2013-06-12  1e89b9ac4a87e9cf53166530d3696387
+
+    34241-0014-Data.rda                 -       7,150     350     2013-06-12  8d345b4de68c8697f710d2e25947ac79
+
+    34241-0014-Data.sav                 -       7,150     350     2013-06-12  ce28bafd7026d762ea91365db131fb23
+
+    34241-0014-Data.stc                 -       7,150     350     2013-06-12  800de2868d325d5979914d0b138e560e
+
+    34241-0014-Data.tsv                 -       7,150     350     2013-06-12  3edc73325060f45a2d6c8b029e8c3b87
+
+    34241-0014-Data.txt                 4042    7,150     350     2013-06-12  17246b2a457de882d69cd1ace29b72d4
+
+    34241-0014-Setup.dct                -       -         -       2013-06-12  5815d8e7e57994722ba49e7cb122e3ca
+
+    34241-0014-Setup.do                 -       -         -       2013-06-12  323280a13d21a6444fa78b91d105d135
+
+    34241-0014-Setup.sas                -       -         -       2013-06-12  c9fa844e8eb3ca1778d06e532f7db466
+
+    34241-0014-Setup.sps                -       -         -       2013-06-12  f2710bfd11a1a77cf787ffaf292979a1
+
+    34241-0014-Supplemental_syntax.do   -       -         -       2013-06-12  aa1dd6bf79f0bf43bfdfd1d8eb4b4b65
+
+    34241-0014-Supplemental_syntax.sas  -       -         -       2013-06-12  be9db7ab498bd2c640acc90799750e7b
+
+
+DS0015 Mexico SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0015-Data.dta                 -       4,142     341     2013-06-12  06c2220fa6bb8008c903e37e4b965d3f
+
+    34241-0015-Data.rda                 -       4,142     341     2013-06-12  511a0c0d41112ae01e54bca63500bbcb
+
+    34241-0015-Data.sav                 -       4,142     341     2013-06-12  4d9c4e985ac8e232d38a3dc6f6e2d982
+
+    34241-0015-Data.stc                 -       4,142     341     2013-06-12  e7f1ada32092e5ed1383b28643c2000d
+
+    34241-0015-Data.tsv                 -       4,142     341     2013-06-12  03fa0f5905853dffed406382078a8d81
+
+    34241-0015-Data.txt                 3980    4,142     341     2013-06-12  3f7e5f73848e403a82f7e1f20994c087
+
+    34241-0015-Setup.dct                -       -         -       2013-06-12  9eaea50b95cec425aa93f0597c2843ff
+
+    34241-0015-Setup.do                 -       -         -       2013-06-12  052e49eed344847777565c9ea98e37cf
+
+    34241-0015-Setup.sas                -       -         -       2013-06-12  e7dbb19e5b2bb1f48b5bd27c7a0eeb32
+
+    34241-0015-Setup.sps                -       -         -       2013-06-12  1d3760249f64148d27c494e3386e2bbc
+
+    34241-0015-Supplemental_syntax.do   -       -         -       2013-06-12  f191fc5b716bf1bc623a8ac5be4923aa
+
+    34241-0015-Supplemental_syntax.sas  -       -         -       2013-06-12  a571c642087fe0bc85c2a6602c5d4976
+
+
+DS0016 Russia SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0016-Data.dta                 -       4,511     349     2013-06-12  ba2a26463fe372756123316e762d36ba
+
+    34241-0016-Data.rda                 -       4,511     349     2013-06-12  88c920211e300096a7b8da2a8f09669d
+
+    34241-0016-Data.sav                 -       4,511     349     2013-06-12  2677dee1ea24c3aff1fe43947d08f226
+
+    34241-0016-Data.stc                 -       4,511     349     2013-06-12  7efec512e94179bb60d3bc23e92cbda5
+
+    34241-0016-Data.tsv                 -       4,511     349     2013-06-12  6e3c62ba0c6267ba9bfbf70b98d96a39
+
+    34241-0016-Data.txt                 4050    4,511     349     2013-06-12  639b34dcb9863fa1e29ea34ec40110d9
+
+    34241-0016-Setup.dct                -       -         -       2013-06-12  c47e8ef31b1a19e9c05b03d8b37205ba
+
+    34241-0016-Setup.do                 -       -         -       2013-06-12  71cb33db4500b567c440b200e03fe2ef
+
+    34241-0016-Setup.sas                -       -         -       2013-06-12  c5c54a1138ecf5f7cdf6dc4e8929c767
+
+    34241-0016-Setup.sps                -       -         -       2013-06-12  b090d453277047b591d495c8850e8ad0
+
+    34241-0016-Supplemental_syntax.do   -       -         -       2013-06-12  e45bcf4574f9f574e4d25a02aef639c5
+
+    34241-0016-Supplemental_syntax.sas  -       -         -       2013-06-12  256c093c13f88733f0919da8f0010aa1
+
+
+DS0017 South Africa SAGE Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0017-Data.dta                 -       3,830     346     2013-06-12  65355d1498d8d9944beea0f650a4285b
+
+    34241-0017-Data.rda                 -       3,830     346     2013-06-12  859e5ea0ce1bfd6de0c6d9d04ce41f6d
+
+    34241-0017-Data.sav                 -       3,830     346     2013-06-12  f7cdb8c7a4a4184e3aaf177a690303c3
+
+    34241-0017-Data.stc                 -       3,830     346     2013-06-12  97502d98d38ec17ad018a792bf5a340d
+
+    34241-0017-Data.tsv                 -       3,830     346     2013-06-12  32acf30d10a3748f6bd8b71066d517ea
+
+    34241-0017-Data.txt                 3997    3,830     346     2013-06-12  cb3d54817f4a94bc94500c0b7d864516
+
+    34241-0017-Setup.dct                -       -         -       2013-06-12  7bdc57f5abcb2cce4cf7ebc1dea74714
+
+    34241-0017-Setup.do                 -       -         -       2013-06-12  3caefa4049846df21c3d2a748e4e9f2f
+
+    34241-0017-Setup.sas                -       -         -       2013-06-12  d66b73052018a3e37e4ae4df19d3d030
+
+    34241-0017-Setup.sps                -       -         -       2013-06-12  f08294f1fc2c7690d688f4dcbaff5d58
+
+    34241-0017-Supplemental_syntax.do   -       -         -       2013-06-12  a7e39ec4a12d655e350fd40b5c7508d9
+
+    34241-0017-Supplemental_syntax.sas  -       -         -       2013-06-12  285f73b3a6d9f1cfe499705400f1a67d
+
+
+DS0018 China (CLHLS) Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0018-Data.dta                 -       16,064    138     2013-06-12  7605b0822bd5c4a2ef556e8d356cc637
+
+    34241-0018-Data.rda                 -       16,064    138     2013-06-12  10d771dffd92479ab098d49a5564fb63
+
+    34241-0018-Data.sav                 -       16,064    138     2013-06-12  2506466b882e29b3f8f1658d086c031d
+
+    34241-0018-Data.stc                 -       16,064    138     2013-06-12  b13bcfadb5d885c75869e6c189e513d9
+
+    34241-0018-Data.tsv                 -       16,064    138     2013-06-12  dbecebf0c20925cf1a2a9d0fee56e758
+
+    34241-0018-Data.txt                 1083    16,064    138     2013-06-12  ca601b8ee6a817d43170f7fabfa2d40b
+
+    34241-0018-Setup.dct                -       -         -       2013-06-12  bdab654237ac882e2f8cc4b9aed2ac9f
+
+    34241-0018-Setup.do                 -       -         -       2013-06-12  80123a53a05c00ce9702f93c53be8c24
+
+    34241-0018-Setup.sas                -       -         -       2013-06-12  5da73faef45e2b1f5462497e07721678
+
+    34241-0018-Setup.sps                -       -         -       2013-06-12  970a252fbd78360c7d99404d8d341905
+
+    34241-0018-Supplemental_syntax.do   -       -         -       2013-06-12  77fa5e828169074e63468f78e8b4a720
+
+    34241-0018-Supplemental_syntax.sas  -       -         -       2013-06-12  4942f68355e4d1dd59e8a73f66cd7227
+
+
+DS0019 China (CHNS) Data
+
+    Filename                            Record  Record    Var.    Date        MD5
+                                        Length  Count     Count   Updated     Checksum
+
+    34241-0019-Data.dta                 -       6,452     103     2013-06-12  a57fcda43f7eca0d4d2a0fa34a44d296
+
+    34241-0019-Data.rda                 -       6,452     103     2013-06-12  64c4b809af4da9a332be6f4e8c121600
+
+    34241-0019-Data.sav                 -       6,452     103     2013-06-12  a3508eafd54e010949c6b5cb31f7e404
+
+    34241-0019-Data.stc                 -       6,452     103     2013-06-12  180ddc0e6482c4a4bd270c7e15433eb2
+
+    34241-0019-Data.tsv                 -       6,452     103     2013-06-12  4d1b916943f8097542e1867eaf2f5b9d
+
+    34241-0019-Data.txt                 766     6,452     103     2013-06-12  dade528df2f779b9c74b2a99e7ed55ba
+
+    34241-0019-Setup.dct                -       -         -       2013-06-12  f6900d377fc0661ad87438e7a66075e0
+
+    34241-0019-Setup.do                 -       -         -       2013-06-12  28f7ae2402b5bc03b7ed22e9c8f47909
+
+    34241-0019-Setup.sas                -       -         -       2013-06-12  76ee843d462e86c8f88b71eb6e259787
+
+    34241-0019-Setup.sps                -       -         -       2013-06-12  f1ba94115c2736c89bf662c12cf9237e
+
+    34241-0019-Supplemental_syntax.do   -       -         -       2013-06-12  716f1fa2a828a3d2a46d86f128510011
+
+    34241-0019-Supplemental_syntax.sas  -       -         -       2013-06-12  cdcec4ca5be9b64e181d50a862759b71
+
+
+Version History
+
+2015-05-07 Two variables were dropped from the Harmonized Cross-national
+RELATE Data file (part 1).  References to these variables in the
+documentation were removed and a collection note was added.

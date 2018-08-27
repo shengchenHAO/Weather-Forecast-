@@ -1,0 +1,586 @@
+---
+title: "Stat 503 project weather forcast"
+author: "Shengchen Hao"
+date: "March 22, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=F, message=F}
+#load data
+library(data.table) 
+library(dplyr)  
+library(tidyr)
+raw_data = read.csv("seattle2015.csv", header = T, sep = ",") 
+raw_data$STATION = NULL 
+raw_data$NAME = NULL 
+raw_data$TDIF = raw_data$TMAX - raw_data$TMIN
+raw_data = as.data.table(raw_data)
+
+raw_data_2 = read.csv("seattle2012.csv", header = T, sep = ",") 
+raw_data_2$STATION = NULL 
+raw_data_2$NAME = NULL  
+raw_data_2$TDIF = raw_data_2$TMAX - raw_data_2$TMIN
+raw_data_2 =as.data.frame(raw_data_2) 
+###
+data_process = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)   
+  temp2 = temp[,22:29] 
+  temp2[is.na(temp2)] = 0  
+  temp1 = cbind(temp[,1:21], temp$TDIF)
+  temp = cbind(temp1, temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+}
+
+data = data_process(raw_data) 
+# separate the column ?DATE 
+vars <- c("year", "month", "date")
+#data = separate(data = data, DATE, into = vars, sep = "-", extra = "drop") 
+
+#####################################################################
+
+data_process = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  temp2 = temp[,23:36] 
+  temp2[is.na(temp2)] = 0   
+  temp1 = cbind(temp[,1:22], temp$TDIF)
+  temp = cbind(temp1, temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+}
+data_2 = data_process(raw_data_2)
+#data_2 = separate(data_2, DATE, into = vars, sep = "-", extra = "drop") 
+######################################################################
+# shift 1 day
+create_pred = function(data){ 
+  data$RAIN = 1*(data$PRCP > 0.01) 
+  temp1 = data[-1,]$RAIN  
+  temp1 = as.data.frame(temp1)
+  temp2 = data[-nrow(data),] 
+  temp2 = as.data.frame(temp2)
+  temp2$RAIN = NULL
+  temp3 = cbind(temp2,temp1) 
+  return(temp3)
+} 
+
+```
+
+# time series
+```{r} 
+temperature = data$`temp$TDIF` 
+png("/Users/shengchenhao/Desktop/spectrum.png")
+spec_temp = spectrum(temperature,  main="Spectrum periodogram of TDIF", xlab = "Frequency")  
+dev.off()
+cycle = spec_temp$freq[which.max(spec_temp$spec)]  
+cat("The frequency domain is ", cycle, "cycle per observation (day).", "\n",  
+    "The cycle period is ",1/cycle, "days.")
+
+temp = data[1:730,]
+date = as.Date(temp$DATE)
+temperature = temp$`temp$TDIF` 
+prcp = temp$PRCP
+png("/Users/shengchenhao/Desktop/timeplot.png")
+par(mar=c(6, 5, 4, 5))
+plot(date, prcp,xlim = c(as.Date("2015-01-01"), as.Date("2016-12-30")), 
+     xlab = "Month", ylab = "PRCP", main = "Time Plot", type = "l")  
+par(new = T) 
+plot(date, temperature,xlim = c(as.Date("2015-01-01"), as.Date("2016-12-30")), 
+     xlab = "",ylab = "", col = "red", type = "l") 
+axis(side = 4)
+mtext("TDIF", side = 4, line = 3) 
+dev.off()
+
+```
+
+
+
+### plot with ggmap
+```{r}
+library(ggmap)
+library(ggplot2) 
+library(dplyr) 
+library(data.table)
+
+# Plot of pcrp 
+
+map <- get_map('Seattle', zoom = 9, maptype = 'roadmap') 
+temp_plot = raw_data[DATE == "2015-12-09"] 
+png("/Users/shengchenhao/Desktop/map_prcp.png")
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color=PRCP)) + 
+  scale_color_gradient(low="red", high="blue") +
+  ggtitle("Weather Stations in Seattle", subtitle = "Color assigned based on PRCP (precipitation)")
+dev.off()
+rm(temp_plot) 
+
+# plot of tmax 
+temp_plot = raw_data[DATE == "2015-11-09"] 
+png("/Users/shengchenhao/Desktop/map_TMAX.png")
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color=TMAX)) + 
+  scale_color_gradient(low="blue", high="red") +
+  ggtitle("Weather Stations in Seattle", subtitle = "Color assigned based on TMAX (max temperature in the day)")
+dev.off()
+rm(temp_plot) 
+
+# TDIF 
+png("/Users/shengchenhao/Desktop/map_tdif_1.png")
+temp_plot = raw_data[DATE == "2015-07-09"]
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color=TDIF)) + 
+  scale_color_gradient(low="blue", high="red") +
+  ggtitle("Weather Stations in Seattle", subtitle = "Color assigned based on TDIF (temperature differences on July 9)")
+dev.off()
+rm(temp_plot)
+
+# TDIF plot 
+png("/Users/shengchenhao/Desktop/map_tdif1.png")
+temp_plot = raw_data[DATE == "2015-07-09" & TDIF > 0]
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color=TDIF)) + 
+  scale_color_gradient(low="blue", high="red") +
+  ggtitle("Weather Stations in Seattle", subtitle = "Color assigned based on TDIF (temperature differences on July 9)")
+dev.off()
+rm(temp_plot) 
+
+temp_plot = raw_data[DATE == "2015-12-12" & AWND > 7.5] 
+png("/Users/shengchenhao/Desktop/map_awnd.png")
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color=AWND)) + 
+  scale_color_gradient(low="blue", high="red") +
+  ggtitle("Weather Stations in Seattle", subtitle = "Color assigned based on PRCP")
+rm(temp_plot) 
+dev.off()
+detach("package:dplyr", unload = TRUE)
+```
+
+Since WT16 contains to many values, it can't be used to decided the threshold for PRCP.
+
+## clustering 
+```{r}
+temp_cluster = raw_data[DATE == "2015-07-09"][,1:2] 
+pam = pam(temp_cluster, k = 2, diss = F) 
+png("/Users/shengchenhao/Desktop/silhouette.png")
+plot(pam) 
+dev.off()
+
+png("/Users/shengchenhao/Desktop/clustermap.png")
+temp_plot = raw_data[DATE == "2015-07-09"]
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color= pam$clustering)) + 
+  scale_color_gradient(low="blue", high="red")  
+ggmap(map) +
+  geom_point(data=temp_plot, aes(x = temp_plot$LONGITUDE, y = temp_plot$LATITUDE, color= TDIF)) + 
+  scale_color_gradient(low="blue", high="red") 
+dev.off()
+```
+
+## month summary 
+```{r, eval = F}  
+# process the monthly summary data
+library(dplyr) 
+library(tidyr)
+seattle_month = read.csv("seattle_month.csv", header = T, sep = ",") 
+seattle_month$STATION = NULL 
+seattle_month$NAME = NULL 
+data_process_seattle_month = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  temp = temp[,colMeans(is.na(temp)) == 0]  
+  temp = as.data.frame(temp)
+  return(temp)
+} 
+seattle_month = data_process_seattle_month(seattle_month) 
+month = seattle_month[, c(1,21)]  
+vars = c("year", "month") 
+month = separate(month, DATE, into = vars, sep = "-", extra = "drop")
+month$year = NULL 
+colnames(month) = c("month", "PRCP_MONTH") 
+month$month = as.numeric(month$month)
+detach("package:dplyr", unload = TRUE)
+```
+
+
+```{R}
+# delete variables that I won't need  
+data_forecast = data 
+data_forecast2 = data_2
+data_forecast[,23:30] = NULL 
+data_forecast[,1:6] = NULL
+data_forecast$PGTM = NULL 
+data_forecast$SNOW = NULL 
+data_forecast$SNWD = NULL 
+data_forecast$WESD = NULL
+data_forecast$WESF = NULL 
+data_forecast$TAVG = NULL
+
+
+data_forecast2[,21:34] = NULL 
+data_forecast2[,1:6] = NULL 
+data_forecast2[,3:4] = NULL
+data_forecast2[,8:9] = NULL
+colnames(data_forecast) == colnames(data_forecast2)  
+data_forecast = rbind(data_forecast2,data_forecast)
+data_forecast = create_pred(data_forecast)
+```
+
+
+
+
+## Feature engineering 
+```{r}
+# temperature difference 
+#data_forecast$TDIF = data_forecast$TMAX - data_forecast$TMIN    
+names(data_forecast)[colnames(data_forecast) == "temp$TDIF"] = "TDIF"
+#data_forecast$WDCD = data_forecast$WDF2 - data_forecast$WDF5  
+#data_forecast$RAIN = (data_forecast$PRCP > 0.01) * 1 # whether it rain today 
+S_out = S_out[order(S_out$DATE),]
+# merge the monthly summary  
+#data_forecast$month = as.numeric(data_forecast$month)
+#temp = merge(x = data_forecast, y = month, by = "month", all.x = T)
+#data_forecast = temp
+#data_forecast$PRED = data_forecast$PRCP * data_forecast$PRCP_MONTH
+
+# move temp1 to the last column
+data_forecast$temp2 = data_forecast$temp1
+data_forecast$temp1 = NULL 
+data_forecast$temp1 = data_forecast$temp2 
+data_forecast$temp2 = NULL
+
+# merge the wind data 
+data_forecast$WDF2 = S_out$WDF2 
+data_forecast$WDF5 = S_out$WDF5  
+data_forecast$WSF2 = S_out$WSF2 
+data_forecast$WSF5 = S_out$WSF5 
+data_forecast$temp1 = as.factor(S_out$CLASS*1) 
+
+# separate into train and test data 
+index = sample(1:nrow(data_forecast), size = 1533)
+train = as.data.frame(data_forecast[index,])  
+test = as.data.frame(data_forecast[-index,])  
+
+```
+
+
+###random forest 
+```{r} 
+library(randomForest)  
+library(ggplot2) 
+library(dplyr)
+forest = randomForest(factor(temp1) ~ ., ntree = 500, data = train) 
+prediction <- predict(forest, test)
+error_rate_std = mean(prediction != test$temp1)
+table(prediction,test$temp1)
+importance    <- importance(forest)
+varImportance <- data.frame(Variables = row.names(importance), Importance = round(importance[ ,'MeanDecreaseGini'],2)) 
+rankImportance <- varImportance %>%  mutate(Rank = paste0('#',dense_rank(desc(Importance))))
+png("/Users/shengchenhao/Desktop/randomforest importance.png")
+ggplot(rankImportance, aes(x = reorder(Variables, Importance),  
+    y = Importance, fill = Importance)) +
+  geom_bar(stat='identity') + 
+  geom_text(aes(x = Variables, y = 0.5, label = Rank),
+    hjust=0, vjust=0.55, size = 4, colour= 'red') +
+  labs(x = 'Variables') +
+  coord_flip()+ 
+  ggtitle("") 
+dev.off()
+
+png("/Users/shengchenhao/Desktop/random forest trainerror.png")
+plot(forest, ylim=c(0,1), main = "")
+legend('topright', colnames(forest$err.rate), col=1:3, fill=1:3) 
+dev.off()
+
+summary(train$temp1) 
+detach("package:dplyr", unload = TRUE)
+```
+84.4% of days in train data is raining days. This is imbalanced data and explained why the performance in predicting no rain days are so poor. And since the test data is also imbalanced, the overall test error is low. Well we first try to use bootstrap on train data.
+
+
+## bootstrap
+```{r}
+library(data.table)
+bootstrap_func = function(size, data){ 
+  data = as.data.table(data)
+  temp1 = sample(1:sum(data$temp1 == 0), size = size, replace = T) 
+  temp2 = data[data$temp1 == 0] 
+  train_bootstrap = as.data.frame(rbind(temp2[temp1],data[data$temp1 == 1])) 
+  return(train_bootstrap)
+}
+train_bootstrap = bootstrap_func(800, train) 
+test_bootstrap = bootstrap_func(200, test) 
+# shuffle 
+train_bootstrap = train_bootstrap[sample(nrow(train_bootstrap)),] 
+test_bootstrap = test_bootstrap[sample(nrow(test_bootstrap)),]
+  
+```
+
+
+
+## random forest after bootstrap 
+```{r}
+forest = randomForest(factor(temp1)~., ntree = 500, data = train_bootstrap) 
+prediction <- predict(forest, test)
+error_rate_std = mean(prediction != test$temp1) 
+plot(forest, ylim=c(0,0.3))
+legend('topright', colnames(forest$err.rate), col=1:3, fill=1:3)  
+table(prediction, test$temp1)
+```
+
+
+#nnet 
+```{r}
+library(neuralnet)
+library(nnet) 
+library(parallel) 
+library(ggplot2) 
+
+
+pred = function(nn, dat) {
+  yhat = compute(nn, dat)$net.result
+  yhat = apply(yhat, 1, which.max)
+  return(yhat-1)
+}
+
+cv_nnet = function(data, test, hidden, fold = 10, CV = F){ 
+  require(neuralnet) 
+  formula <- formula(paste("c1 + c2", paste(colnames(data[,1:10]), collapse = " + "), sep = " ~ ")) # may change due to diff data
+  data_nn = cbind(data, class.ind(as.factor(data$temp1))) 
+  test = cbind(test, class.ind(as.factor(test$temp1)))
+  colnames(data_nn) = c(colnames(data), c("c1", "c2")) 
+  colnames(test) = colnames(data_nn)
+  
+  yourdata  = data_nn[sample(nrow(data_nn)),]
+  folds <- cut(seq(1,nrow(yourdata)),breaks=10,labels=FALSE)
+  error_rate = c() 
+  if (CV == T){
+    for(i in 1:fold){ 
+      testIndexes <- which(folds==i,arr.ind=TRUE)
+      testData <- as.data.frame(yourdata[testIndexes, ])
+      trainData <- as.data.frame(yourdata[-testIndexes, ])
+      # Fitting model
+      neuralnet_train <- neuralnet(formula, trainData, hidden = hidden, linear.output = F, lifesign = "none")
+      # compute the error rate 
+      nn_class_pred <- pred(neuralnet_train, testData[, -c((ncol(trainData) - 2):ncol(testData))])
+      error_rate = c(error_rate, mean(nn_class_pred != testData$temp1))
+    } 
+  } 
+  if (CV == F){
+    neuralnet_train <- neuralnet(formula, data_nn, hidden = hidden, linear.output = F, lifesign = "full",stepmax = 1e7,threshold = 1) 
+    # compute the error rate 
+    nn_class_pred <- pred(neuralnet_train, test[, -c((ncol(data_nn) - 2):ncol(data_nn))])
+    error_rate = mean(nn_class_pred != test$temp1)
+  }
+  return(list(error = mean(error_rate), pred = nn_class_pred))
+} 
+```
+
+```{r}  
+train_nn = train
+test_nn = test 
+temp = cv_nnet(train_nn, test_nn, c(10,5)) 
+table(temp$pred, test$temp1)
+```
+
+#test ground
+```{r} 
+# Don't need to use this part
+library(data.table) 
+library(dplyr)  
+houston = read.csv("houston.csv", header = T, sep = ",") 
+data_process_houston = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  temp2 = temp[,22:29] 
+  temp2[is.na(temp2)] = 0   
+  #temp2 = apply(temp2, 2, as.factor)
+  temp = cbind(temp[,1:21], temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+}
+houston = data_process_houston(raw_data) 
+
+atlanta = read.csv("atlanta.csv", header = T, sep = ",") 
+data_process_atl = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  temp2 = temp[,20:26] 
+  temp2[is.na(temp2)] = 0   
+  #temp2 = apply(temp2, 2, as.factor)
+  temp = cbind(temp[,1:19], temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+} 
+atlanta = data_process_atl(atlanta) 
+
+############## if use wt16 as rain indicator
+data_forecast = data_2 
+
+# shift 1 day
+create_pred = function(data){ 
+  data$RAIN = 1*(data$WT16 > 0) 
+  temp1 = data[-1,]$RAIN  
+  temp1 = as.data.frame(temp1)
+  temp2 = data[-nrow(data),] 
+  temp2 = as.data.frame(temp2)
+  temp2$RAIN = NULL
+  temp3 = cbind(temp2,temp1) 
+  return(temp3)
+} 
+data_forecast = create_pred(data_forecast)
+# temperature difference 
+data_forecast$TDIF = data_forecast$TMAX - data_forecast$TMIN   
+data_forecast$WDCD = data_forecast$WDF2 - data_forecast$WDF5  
+data_forecast$month = as.numeric(data_forecast$month)
+
+
+# move temp1 to the last column
+data_forecast$temp2 = data_forecast$temp1
+data_forecast$temp1 = NULL 
+data_forecast$temp1 = data_forecast$temp2 
+data_forecast$temp2 = NULL
+
+data_forecast$year = NULL 
+data_forecast$date = NULL
+data_forecast$month = as.numeric(data_forecast$month)
+# separate into train and test data 
+index = sample(1:nrow(data_forecast), size = 800)
+train = as.data.frame(data_forecast[index,])  
+test = as.data.frame(data_forecast[-index,]) 
+```
+
+
+
+
+## SVM 
+```{r}
+# this part is written by Zetan 
+library(sparsediscrim)
+library(e1071)
+cv_cost_svm=function(datatrain,datatest,cost,kernel,fold){
+  folds = cv_partition(datatrain[,12], num_folds=fold)
+  
+  cverr = sapply(folds, function(fol) {
+  svmcv = svm(as.factor(temp1)~., dat=datatrain[fol$training,],kernel=kernel, cost=cost)
+
+  svmpred = predict(svmcv, datatrain[fol$test,])
+ 
+  mean(svmpred != datatrain[fol$test,12])})
+  cv_error = mean(cverr)
+  
+  model=svm(as.factor(temp1)~., dat=datatrain,kernel=kernel, cost=cost)
+  
+  test_error=mean(predict(model, datatest) != datatest[,12])
+  print(table(datatest[,12],predict(model, datatest) ))
+  return(c(cv_error,test_error))
+}
+
+train_svm = train 
+train_svm$RAIN = NULL 
+NY_svm = NY 
+NY_svm$RAIN = NULL 
+
+radial_result=cv_cost_svm(datatrain=NY_svm,datatest = train,cost=1,kernel='radial',fold=10) 
+temp = runif(10, -5, 5) 
+costs = exp(temp)
+tune.svm(factor(temp1)~., data = train, cost = costs) 
+detach("package:sparsediscrim", unload = TRUE) 
+detach("package:dplyr", unload = TRUE)
+```
+
+
+## Test with New York Data 
+```{r}
+raw_data = read.csv("NY2016.csv", header = T, sep = ",") 
+raw_data$STATION = NULL 
+raw_data$NAME = NULL 
+raw_data$TDIF = raw_data$TMAX - raw_data$TMIN
+raw_data = as.data.table(raw_data)
+```
+
+```{r} 
+library(dplyr)
+data_process = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)   
+  temp2 = temp[,22:30] 
+  temp2[is.na(temp2)] = 0  
+  temp1 = cbind(temp[,1:21], temp$TDIF)
+  temp = cbind(temp1, temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+}
+
+data = data_process(raw_data) 
+
+create_pred = function(data){ 
+  data$RAIN = 1*(data$PRCP > 0.01) 
+  temp1 = data[-1,]$RAIN  
+  temp1 = as.data.frame(temp1)
+  temp2 = data[-nrow(data),] 
+  temp2 = as.data.frame(temp2)
+  temp2$RAIN = NULL
+  temp3 = cbind(temp2,temp1) 
+  return(temp3)
+} 
+NY = create_pred(data) 
+
+names(NY)[colnames(NY) == "temp$TDIF"] = "TDIF"  
+NY$temp1 = as.factor(NY_out$CLASS*1)
+#NY$RAIN = (NY$PRCP > 0.01) * 1 
+NY = as.data.table(NY)
+#NY$WDCD = NY$WDF2 - NY$WDF5  
+NY = as.data.table(select(NY, colnames(train)))  
+
+# take the whole 2016 new york data as test data
+forest = randomForest(factor(temp1) ~ ., ntree = 500, data = train) 
+prediction <- predict(forest, NY)
+error_rate_std = mean(prediction != NY$temp1)
+table(prediction, NY$temp1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

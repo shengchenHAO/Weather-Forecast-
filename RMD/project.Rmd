@@ -1,0 +1,146 @@
+---
+title: "503 Project"
+author: "Shengchen Hao"
+date: "2018/3/2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+```
+ 
+
+###### Donor data testing section 
+```{r}
+train = read.csv("train_donor.csv", header = T)  
+full = train  
+
+train$id = NULL 
+train$project_essay_1 = NULL 
+train$project_essay_2 = NULL 
+train$project_essay_3 = NULL
+train$project_essay_4 = NULL 
+train$teacher_id = NULL 
+train$project_title = NULL 
+train$project_resource_summary = NULL  
+train$project_is_approved = as.factor(train$project_is_approved) 
+train$project_submitted_datetime = NULL    
+
+
+train_new = separate(train, project_subject_categories, into = "category", sep = " ", extra = "drop") 
+train_new = separate(train_new, project_subject_subcategories, into = "subcategory", sep = " ", extra = "drop")
+summary(train_new) 
+na.omit(train_new) 
+
+train_new$category = as.factor(train_new$category)    
+train_new$subcategory = as.factor(train_new$subcategory)  
+train_new = as.data.frame(train_new)
+train_new$subcategory = NULL  
+
+train_new$teacher_prefix = as.factor(train_new$teacher_prefix)
+train_new$school_state = as.factor(train_new$school_state) 
+train_new$project_grade_category = as.factor(train_new$project_grade_category)
+
+
+```
+
+
+### process 
+```{r}
+filter(train, teacher_prefix == "Teacher")
+```
+
+#############
+
+```{r} 
+library('ggplot2') 
+library('ggthemes') 
+library('scales') 
+library('dplyr')
+library('mice') 
+library('randomForest')   
+library(data.table) 
+library(tidyr)
+
+test = read.csv("test.csv", header = T)
+train = read.csv("train.csv", header = T)  
+train$id <- seq.int(nrow(train))
+full  <- bind_rows(train, test)
+```
+
+```{r}
+summary(full)
+```
+
+
+No missing value, good to go.
+
+
+```{r}
+rf_model <- randomForest(factor(price_range) ~ ., mtry = 2, data = train)
+
+plot(rf_model, ylim=c(0,0.8))
+legend('topright', colnames(rf_model$err.rate), col=1:5, fill=1:5)
+
+```
+
+```{r}
+
+importance    <- importance(rf_model)
+varImportance <- data.frame(Variables = row.names(importance), Importance = round(importance[ ,'MeanDecreaseGini'],2)) 
+rankImportance <- varImportance %>%  mutate(Rank = paste0('#',dense_rank(desc(Importance))))
+
+ggplot(rankImportance, aes(x = reorder(Variables, Importance), 
+    y = Importance, fill = Importance)) +
+  geom_bar(stat='identity') + 
+  geom_text(aes(x = Variables, y = 0.5, label = Rank),
+    hjust=0, vjust=0.55, size = 4, colour= 'red') +
+  labs(x = 'Variables') +
+  coord_flip()  
+  #theme_few()
+```
+
+
+```{r}
+prediction <- predict(rf_model, test)
+
+solution <- data.frame(id = test$id, price_range = prediction)
+
+write.csv(solution, file = 'result.csv', row.names = F)
+
+colnames(solution) = c("id", "prediction") 
+test = merge(test, solution, by = c("id"))  
+
+```
+
+
+
+## Cross Validation
+```{r}
+#Randomly shuffle the data
+yourdata<-train_new[sample(nrow(train_new)),]
+#Create 10 equally size folds
+folds <- cut(seq(1,nrow(yourdata)),breaks=10,labels=FALSE)
+#Perform 10 fold cross validation
+error_rate = c()
+for(i in 1:10){
+  #Segement your data by fold using the which() function 
+  testIndexes <- which(folds==i,arr.ind=TRUE)
+  testData <- yourdata[testIndexes, ]
+  trainData <- yourdata[-testIndexes, ] 
+  
+  # Fitting model
+  fit = randomForest(factor(project_is_approved) ~ ., trainData, ntree=500)
+  #Predict Output 
+  predicted = predict(fit, testData)
+  
+  # compute the error rate
+  error_rate = c(error_rate, mean(predicted == testData$price_range))
+} 
+mean(error_rate)
+```
+
+
+
+
+

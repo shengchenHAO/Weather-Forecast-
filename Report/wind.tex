@@ -1,0 +1,17 @@
+\subsection{Wind Speed and Wind Directions}
+
+As we have mentioned, there are four attributes regarding wind (WSF2, WDF2, WSF5, WDF5) in the data. Among the four, each pair of (WSF, WDF) represents a 2-dim \emph{vector} (wind vector) in polar coordinates. Sometimes, there is a significant variation of directions between different records of the same day, and thus, we shouldn't take their mean directly.
+
+To better summarize the wind vectors, we may consider a natural model about the wind vectors in station $i$:
+$$\vec v_i(t)=\vec{v}(t)+\vec u_i+\vec\epsilon_i(t),$$
+where $\vec{v_i}(t)$ is the wind vector at station $i$ by time $t$, $\vec u_i$ is a fixed effect for station $i$, and $\vec \epsilon_i(t)$ is the error vector.
+
+With the assumption that the term $\vec\epsilon_i(t)$ has i.i.d. bivariate normal distribution, we may estimate the overall wind vector by estimator
+$$\hat{\vec v}_i(t)=\frac1n\sum_{i=1}^n\vec v_i(t)$$
+with a constant bias
+$$\vec b=\frac1n\sum_{i=1}^n\vec u_i.$$
+Such bias here can be viewed as a fixed translation of the attribute space (since it is constant), and can thus be omitted in further analyses.
+
+Since we are only interested in the overall wind condition for Seattle, further analyses would only be concerned with the mean vectors $\hat{\vec v}(t)$. For convenience they are still presented in polar coordinates with the same attribute names. (It might be hard to interpret if they are presented in Cartesian coordinates.)
+
+It is perhaps remarkable that since we have polar coordinates as attributes, the attribute space would not be flat. In fact, the subspace regarding WDF2 (and the one regarding WDF5 as well) is homeomorphic to $\mathbb S^1$ instead of $\mathbb R^1$.

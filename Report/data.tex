@@ -1,0 +1,38 @@
+\subsection{Dataset in Use}
+
+The dataset used in our study is obtained from \href{https://www.ncdc.noaa.gov/cdo-web/}{NOAA} (National Oceanic and Atmospheric Administration). It is a part of NOAA's GHCN(Global Historical Climatology Network)-Daily database\cite{noaa}, and is concerned with daily climate data of Seattle from January \engordnumber{1}, 2012 to January \engordnumber{1}, 2018. The records are colloected from up to 190 stations accross Seattle area, with different sets of attributes. The main attributes are listed in Table \ref{tbld}.
+
+For practical use, we sample $70\%$ of the data as the training set, and the rest as the test set.
+
+The models are also applied to daily climate data of New York in 2017, which come from the same database.
+
+\begin{table}[h]
+\setlength{\belowcaptionskip}{5pt}
+\caption{Attributes of the Dataset}
+\label{tbld}
+\centering
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{|c|l|}
+\hline
+\textbf{Attribute} & \textbf{Explanation (unit)}\\
+\hline
+PRCP & Precipitation (inches)\\
+\hline
+TMAX & Maximum temperature ($^\circ$F)\\
+\hline
+TMIN & Minimum temperature ($^\circ$F)\\
+\hline
+TOBS & Temperature at the time of observation ($^\circ$F)\\
+\hline
+WDF2 & Direction of fastest 2-minute wind ($^\circ$)\\
+\hline
+WDF5 & Direction of fastest 5-second wind ($^\circ$)\\
+\hline
+WSF2 & Fastest 2-minute wind speed (miles/h)\\
+\hline
+WSF5 & Fastest 5-second wind speed (miles/h)\\
+\hline
+AWND & Average daily wind speed (miles/h)\\
+\hline
+\end{tabular}
+\end{table}

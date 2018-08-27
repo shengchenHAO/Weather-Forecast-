@@ -1,0 +1,357 @@
+---
+title: "report1"
+author: "Zetan Li"
+date: "July 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(randomForest)
+library(stringr)
+library(xts)
+library(lubridate)
+library(tseries)
+library(MASS)
+library(nnet)
+```
+
+
+```{r}
+dem_dt=read.csv('F:/price project/price4.csv',stringsAsFactors = F,header=T)
+
+##first we replace some missing values with 0 because themselve's characters
+##0 means there is no notify and 1 means there is
+##and we do some feature engineering
+
+fire_dam=dem_dt$Property..MCM.Fire.Damage
+fire_dam[fire_dam!='Yes']=0
+fire_dam[fire_dam=='Yes']=1
+
+GTJ_overall_condition=dem_dt$GTJ.Overall.Condition
+GTJ_overall_condition[GTJ_overall_condition %in% c("","N/A - Vacant Lot","2","N/A","-")]='No_response'
+
+grant=dem_dt$Grant.Program..Grant
+nongrant=dem_dt$Non.HHF.Demo.Funding.Source
+
+funding_group=grant
+funding_group[which(grant=='')]=nongrant[which(grant=='')]
+
+
+
+new_dt=dem_dt%>%transmute(parcel_id=Parcel.ID,Address=Address,council_dist=Council.District,ZIP=Property..ZIP.Code,Neighborhood=Property..Neighborhood,lat=Property..Latitude,lon=Property..Longitude,date=Knock.Down.Date,year_built=Property..Year.Built,floor_area=Property..Floor.Area,square_ft=Property..Parcel.Square.Footage,rfp_group=Demo.RFP.Group,demo_price=Socrata.Reported.Price,BidPri_demo=Bid.Price..Demolition,BidPri_HazardM=Bid.Price..Other.Hazardous.Materials,BidPri_Dirt=Bid.Price..Dirt,BidPri_Grade=Bid.Price..Grade,BidPri_Seed=Bid.Price..Seed,BidPri_Abatement=Bid.Price..Abatement,BidPri_ADSC=Bid.Price..Abatement.Demo.Single.Cost,Astimate_ab_min=ASB.Abatement.Estimate.Min,fire_dam,GTJ_overall_condition,Contractors=Demo.Contractor..Account.Name,Case.Number)
+
+nobid_dt=dem_dt%>%transmute(parcel_id=Parcel.ID,Address=Address,council_dist=Council.District,ZIP=Property..ZIP.Code,Neighborhood=Property..Neighborhood,lat=Property..Latitude,lon=Property..Longitude,date=Knock.Down.Date,year_built=Property..Year.Built,floor_area=Property..Floor.Area,square_ft=Property..Parcel.Square.Footage,rfp_group=Demo.RFP.Group,demo_price=Socrata.Reported.Price,fire_dam,GTJ_overall_condition,Contractors=Demo.Contractor..Account.Name)
+
+new_dt=cbind(new_dt,funding_group)
+nobid_dt=cbind(nobid_dt,funding_group)
+
+new_dt=new_dt%>%filter(funding_group!='',rfp_group!='')
+nobid_dt=nobid_dt%>%filter(funding_group!='',rfp_group!='')
+droplevels(new_dt)
+droplevels(nobid_dt)
+```
+
+
+Time series analysis.
+
+```{r}
+new_dt$date=as.Date(new_dt$date,'%m/%d/%Y')
+
+time_data=data.frame(date=new_dt$date,price=new_dt$demo_price)
+time_data=na.omit(time_data)
+year=year(time_data$date)
+month=month(time_data$date)
+ym=paste(year,month,sep='-')
+
+
+tm14=time_data[which(year<2015 & year>=2014),]
+tm15=time_data[which(year<2016 & year>=2015),]
+tm16=time_data[which(year<2017 & year>=2016),]
+tm17=time_data[which(year<2018 & year>=2017),]
+tm18=time_data[which(year<2019 & year>=2018),]
+
+
+tplot_day=function(data,year){
+  dmm=aggregate(data$price,FUN=mean,by=list(data$date))
+  dmm_zoo=zoo(dmm$x,as.Date(dmm$Group.1),frequency = 31)
+   plot(dmm_zoo,xlab = 'Month',ylab = 'Daily average Price',main=year)
+   abline(reg=lm(dmm_zoo~time(dmm_zoo)),col='red')
+   
+}
+
+
+layout(matrix(c(1,2,3,4,5,6),byrow = T,nrow=3))
+tplot_day(time_data,'2014-2018')
+tplot_day(tm14,'2014')
+tplot_day(tm15,'2015')
+tplot_day(tm16,'2016')
+tplot_day(tm17,'2017')
+tplot_day(tm18,'2018')
+
+
+mm=aggregate(time_data$price,FUN=mean,by=list(ym))
+mm_xts=as.xts(mm$x,as.yearmon(mm$Group.1),frequency =12)
+mm_ts=as.ts(mm_xts,start=2014)
+plot(mm_ts,ylab='Monthly Average Price',main='2014-2018')
+abline(reg=lm(mm_ts~time(mm_ts)),col='red')
+
+boxplot(mm_ts~cycle(mm_ts))
+
+```
+
+Find what happened in 2016
+
+```{r}
+tm169=tm16[tm16$date>as.Date('2016-09-28'),]%>%group_by(date)%>%summarise(price=mean(price))
+```
+
+
+We plot the price distribution in each year
+```{r}
+tm14m=tm14%>%group_by(date)%>%summarise(price=mean(price))
+tm15m=tm15%>%group_by(date)%>%summarise(price=mean(price))
+tm16m=tm16%>%group_by(date)%>%summarise(price=mean(price))
+tm17m=tm17%>%group_by(date)%>%summarise(price=mean(price))
+tm18m=tm18%>%group_by(date)%>%summarise(price=mean(price))
+
+dt2=rbind(cbind(tm14m,year='2014'),cbind(tm15m,year='2015'),cbind(tm16m,year='2016'),cbind(tm17m,year='2017'),cbind(tm18m,year='2018'))
+
+ggplot(data=dt2)+stat_density(aes(price,col=year),position="identity", fill="transparent",adjust = 0.5)+ggtitle('Price Distribution Density')
+```
+
+
+
+
+
+```{r}
+
+
+
+
+```
+
+In 2018 the outliers are price>29000 and price<10000
+In 2017 the outliers are price>25000 and price<6000
+In 2016 the outliers are price>22500 and price<8000
+In 2015 the outliers are price>22500 and price<10000
+In 2014 the outliers are price>20000
+
+```{r}
+
+new_dt$GTJ_overall_condition=as.factor(new_dt$GTJ_overall_condition)
+new_dt$fire_dam=as.numeric(new_dt$fire_dam)
+dt3=new_dt[new_dt$floor_area!=0,]
+dt31=na.omit(dt3[,c(10,13)])
+gtj14=new_dt[which(year<2015 & year>=2014),]
+gtj15=new_dt[which(year<2016 & year>=2015),]
+gtj16=new_dt[which(year<2017 & year>=2016),]
+gtj17=new_dt[which(year<2018 & year>=2017),]
+gtj18=new_dt[which(year<2019 & year>=2018),]
+
+
+tt14=gtj14%>%transmute(date,year_built,floor_area,GTJ_overall_condition,demo_price,fire_dam,Contractors,funding_group)
+tt15=gtj15%>%transmute(date,year_built,floor_area,GTJ_overall_condition,demo_price,fire_dam,Contractors,funding_group)
+tt16=gtj16%>%transmute(date,year_built,floor_area,GTJ_overall_condition,demo_price,fire_dam,Contractors,funding_group)
+tt17=gtj17%>%transmute(date,year_built,floor_area,GTJ_overall_condition,demo_price,fire_dam,Contractors,funding_group)
+tt18=gtj18%>%transmute(date,year_built,floor_area,GTJ_overall_condition,demo_price,fire_dam,Contractors,funding_group)
+
+
+```
+
+```{r}
+oulier18=tt18[tt18$demo_price>29000|tt18$demo_price<10000,]
+oulier17=tt17[tt17$demo_price>25000|tt17$demo_price<6000,]
+oulier16=tt16[tt16$demo_price>22500|tt16$demo_price<8000,]
+oulier15=tt15[tt15$demo_price>22500|tt15$demo_price<10000,]
+oulier14=tt14[tt14$demo_price>20000,]
+```
+
+Plot something against 
+
+```{r}
+
+```
+
+
+
+Then 2014-2015 has a extreme increasing of the price, so we firstly find some trends of Time against other variables in 2014-2015
+
+```{r}
+bid_time=data.frame(date=new_dt$date,Abatement=new_dt$BidPri_Abatement,Grade=new_dt$BidPri_Grade,Dirt=new_dt$BidPri_Dirt,Demo=new_dt$BidPri_demo,HazardM=new_dt$BidPri_HazardM,Seed=new_dt$BidPri_Seed,yearbuilt=new_dt$year_built,floor_area=new_dt$floor_area,square_ft=new_dt$square_ft,zip=new_dt$ZIP,funding_group=new_dt$funding_group,demo_price=new_dt$demo_price)
+
+
+
+bid_time2014=bid_time[which(year(bid_time$date)<2015 & year(bid_time$date)>=2014),]
+b2=na.omit(bid_time2014[,c(1,8:11)])
+b2=b2%>%filter(yearbuilt!=0,floor_area!=0,square_ft!=0)
+
+zipb2=aggregate(b2$zip,FUN=mean,by=list(b2$date))
+
+yb2=aggregate(b2$yearbuilt,FUN=mean,by=list(b2$date))
+floorb2=aggregate(b2$floor_area,FUN=mean,by=list(b2$date))
+squareb2=aggregate(b2$square_ft,FUN=mean,by=list(b2$date))
+
+zip_zoo=zoo(zipb2$x,as.Date(zipb2$Group.1),frequency=31)
+
+yb_zoo=zoo(yb2$x,as.Date(yb2$Group.1),frequency = 31)
+fl_zoo=zoo(floorb2$x,as.Date(floorb2$Group.1),frequency = 31)
+s_zoo=zoo(squareb2$x,as.Date(squareb2$Group.1),frequency = 31)
+
+plot(zip_zoo)
+abline(reg=lm(zip_zoo~time(zip_zoo)),col='red')
+
+
+plot(s_zoo,ylab='daily average square footage',xlab='month')
+abline(reg=lm(s_zoo~time(s_zoo)),col='red')
+plot(fl_zoo,ylab='daily average floor area',xlab='month')
+abline(reg=lm(fl_zoo~time(fl_zoo)),col='red')
+plot(yb_zoo,ylab='daily average year built',xlab='month')
+abline(reg=lm(yb_zoo~time(yb_zoo)),col='red')
+
+
+
+bid2014=bid_time2014
+n2014=group_by(bid2014,date,funding_group)%>%summarise(count=n())
+
+
+ggplot(data=n2014)+geom_line(aes(date,count,color=funding_group),size=1)+scale_fill_brewer(palette='Set1')+scale_color_brewer(palette='Set1')
+
+m2014=group_by(bid2014,date,funding_group)%>%summarise(price=mean(demo_price))
+
+ggplot(data=m2014)+geom_line(aes(date,price,color=funding_group),size=1)+scale_fill_brewer(palette='Set1')+scale_color_brewer(palette='Set1')
+library(tidyr)
+rs_m2014=spread(m2014,key=funding_group,price)
+rs_m2014[is.na(rs_m2014)]=0
+
+
+hh1=rs_m2014%>%ungroup(date)%>%transmute(date,price=HHF1)%>%filter(price!=0)
+
+hh2=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=HHF2)%>%filter(price!=0)
+
+hh3=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=HHF3)%>%filter(price!=0)
+
+hhduplex=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=`HHF Duplex`)%>%filter(price!=0)
+
+fie=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=FIE)%>%filter(price!=0)
+cdbg=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=CDBG)%>%filter(price!=0)
+oth=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=Other)%>%filter(price!=0)
+nsp=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=NSP)%>%filter(price!=0)
+
+dlba=rs_m2014%>%ungroup(date)%>%transmute(date=date,price=`DLBA QOL`)%>%filter(price!=0)
+
+ggplot(data=hh1)+geom_line(aes(date,price),size=1)
+ggplot(data=hh2)+geom_line(aes(date,price),size=1)
+ggplot(data=hh3)+geom_line(aes(date,price),size=1)
+ggplot(data=fie)+geom_line(aes(date,price),size=1)
+
+ggplot(data=cdbg)+geom_line(aes(date,price),size=1)
+ggplot(data=oth)+geom_line(aes(date,price),size=1)
+ggplot(data=nsp)+geom_line(aes(date,price),size=1)
+ggplot(data=dlba)+geom_line(aes(date,price),size=1)
+
+aovana=aov(m2014$price~m2014$funding_group)
+
+```
+
+
+The price change is because there are more HHF and FIE 
+
+
+
+Analyze contractors
+```{r}
+nobid_dt$date=as.Date(nobid_dt$date,'%m/%d/%Y')
+nobid_dt$fire_dam=factor(nobid_dt$fire_dam)
+nobid_dt$Neighborhood=factor(nobid_dt$Neighborhood)
+nobid_dt$Contractors=factor(nobid_dt$Contractors)
+nobid_dt$GTJ_overall_condition=factor(nobid_dt$GTJ_overall_condition)
+nobid_dt$funding_group=factor(nobid_dt$funding_group)
+
+nobid_dt=na.omit(nobid_dt)
+
+top6_in=names(sort(summary(factor(nobid_dt$Contractors)),decreasing = T)[1:6])
+top6_dt=nobid_dt[which(nobid_dt$Contractors%in%top6_in),]
+top6_dt=droplevels(top6_dt)
+t6_summ=top6_dt%>%group_by(Contractors)%>%summarise(price=mean(demo_price),year_built=mean(year_built),floor_area=mean(floor_area),square_ft=mean(square_ft),fire_dam=mean(as.numeric(fire_dam)))
+
+
+day_contractors=top6_dt%>%transmute(Contractors,date,demo_price)%>%group_by(Contractors,date)%>%summarise(price=mean(demo_price))%>%ungroup(Contractors,date)
+ggplot(data=day_contractors)+geom_line(aes(date,price,col=Contractors))+ggtitle('Price changing for top 6 contractors')
+ggplot(data=day_contractors[day_contractors$Contractors=='Able Demolition',])+geom_line(aes(date,price))+ggtitle('Able Demolition')
+ggplot(data=day_contractors[day_contractors$Contractors=='Adamo Group, Inc.',])+geom_line(aes(date,price))+ggtitle('Adamo Group, Inc.')
+ggplot(data=day_contractors[day_contractors$Contractors=='DMC Consultants',])+geom_line(aes(date,price))+ggtitle('DMC Consultants')
+ggplot(data=day_contractors[day_contractors$Contractors=='Homrich',])+geom_line(aes(date,price))+ggtitle('Homrich')
+ggplot(data=day_contractors[day_contractors$Contractors=='Rickman Enterprise Group',])+geom_line(aes(date,price))+ggtitle('Rickman Enterprise Group')
+ggplot(data=day_contractors[day_contractors$Contractors=='Salenbien Trucking & Excavating Inc.',])+geom_line(aes(date,price))+ggtitle('Salenbien Trucking & Excavating Inc.')
+```
+
+
+```{r}
+
+xtabs(demo_price~Contractors+funding_group,data=top6_dt)
+xtabs(~Contractors+GTJ_overall_condition,data=top6_dt)
+xtabs(~Contractors+fire_dam,data=top6_dt)
+xtabs(~Contractors+council_dist,data=top6_dt)
+
+mullm=multinom(Contractors~floor_area+square_ft+fire_dam+GTJ_overall_condition+funding_group,data=top6_dt)
+
+exp(coef(mullm))
+
+```
+
+```{r}
+group10.in=names(sort(summary(top6_dt$funding_group),decreasing = T)[1:10])
+group10.dt=top6_dt[which(top6_dt$funding_group%in%group10.in),]
+
+
+
+
+
+
+group10.dt=droplevels(group10.dt)
+mullm2=multinom(Contractors~floor_area+square_ft+fire_dam+GTJ_overall_condition+funding_group,data=group10.dt)
+z <- summary(mullm2)$coefficients/summary(mullm2)$standard.errors
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+exp(coef(mullm2))
+```
+
+
+Spatial Analysis
+
+```{r}
+s_dt=nobid_dt%>%transmute(Neighborhood,demo_price,lat,)
+```
+
+Scope change
+```{r}
+SOS=read.csv('F:/price project/SOS groups.csv',stringsAsFactors = F,header=T)
+SOS1=SOS[,c(3,8)]
+
+s_dt=merge(new_dt,SOS1,by='Case.Number')
+
+
+aov_an=aov(demo_price~SoS,data=s_dt)
+aov_r=TukeyHSD(aov_an)
+summary(aov_an)
+
+par(las=2)
+plot(aov_r)
+```
+
+
+regression
+
+```{r}
+nobid_dt=droplevels(nobid_dt[nobid_dt$funding_group!='',])
+lm1=lm(demo_price~funding_group,nobid_dt)
+aov2=aov(demo_price~funding_group,nobid_dt)
+```
+

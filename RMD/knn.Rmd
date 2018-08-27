@@ -1,0 +1,199 @@
+---
+title: "k-NN"
+author: "Ruikun Xiao"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning = FALSE)
+```
+
+```{r}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+
+S1 = fread("C:/Users/51404/Desktop/proj/1300141.csv")
+S2 = fread("C:/Users/51404/Desktop/proj/1300144.csv")
+
+cols = c("STATION","LATITUDE","LONGITUDE","ELEVATION","DATE","PRCP","TMAX","TMIN","WDF2","WSF2","WDF5","WSF5")
+S1 = S1[, c("STATION","LATITUDE","LONGITUDE","ELEVATION","DATE","PRCP","TMAX","TMIN","WDF2","WSF2","WDF5","WSF5")]
+S2 = S2[, c("STATION","LATITUDE","LONGITUDE","ELEVATION","DATE","PRCP","TMAX","TMIN","WDF2","WSF2","WDF5","WSF5")]
+
+S = rbind(S1,S2)
+S$DATE = as.Date(S$DATE)
+for(i in c(2:4,6:12)){S[[i]]=as.numeric(S[[i]])}
+S$TDIF = S$TMAX-S$TMIN
+setkey(S, STATION, DATE)
+```
+
+```{r}
+sliding = function(dt, threshold){
+  dates = sort(unique(dt$DATE))
+  day1 = dates[2]-dates[1]
+  dt_next = dt[,c("STATION", "DATE", "PRCP")] %>%
+    .[,.(STATION=STATION, DATE=DATE-day1, CLASS=(PRCP>threshold))]
+  setkey(dt_next, STATION, DATE)
+  dt_m = merge(dt, dt_next)
+  return(dt_m)
+}
+
+sliding2 = function(dt, threshold){
+  dates = sort(unique(dt$DATE))
+  day1 = dates[2]-dates[1]
+  dt_next = dt[,c("DATE", "PRCP")] %>%
+    .[,.(DATE=DATE-day1, CLASS=(PRCP>threshold))]
+  setkey(dt, DATE)
+  setkey(dt_next, DATE)
+  dt_m = merge(dt, dt_next)
+  return(dt_m)
+}
+```
+
+```{r}
+Sp = sliding(S, 0.01)
+ggplot(Sp[DATE==unique(DATE)[5]], aes(x=LONGITUDE, y=LATITUDE, color = CLASS))+geom_point()
+```
+
+```{r}
+spd_mean = function(v,d){
+  xm = mean(v*cos(d*pi/180), na.rm = T)
+  ym = mean(v*sin(d*pi/180), na.rm = T)
+  return(sqrt(xm^2+ym^2))
+}
+
+dir_mean = function(v,d){
+  xm = mean(v*cos(d*pi/180), na.rm = T)
+  ym = mean(v*sin(d*pi/180), na.rm = T)
+  if(xm^2+ym^2>0){
+    newcos = xm/sqrt(xm^2+ym^2)
+    return(acos(newcos)*sign(ym))
+  }
+  return(NA)
+}
+
+take_mean = function(dt, threshold){
+  dt_new = dt %>%
+    .[, .(PRCP=mean(PRCP, na.rm = T),TDIF=mean(TDIF, na.rm = T),
+          WDF2=dir_mean(WSF2, WDF2),WSF2=spd_mean(WSF2,WDF2),
+          WDF5=dir_mean(WSF5, WDF5),WSF5=spd_mean(WSF5,WDF5),
+          CLASS=(mean(CLASS, na.rm = T)>threshold)), by = DATE]
+  return(dt_new)
+}
+
+take_mean2 = function(dt){
+  dt_new = dt %>%
+    .[, .(PRCP=mean(PRCP, na.rm = T),TDIF=mean(TDIF, na.rm = T),
+          WDF2=dir_mean(WSF2, WDF2),WSF2=spd_mean(WSF2,WDF2),
+          WDF5=dir_mean(WSF5, WDF5),WSF5=spd_mean(WSF5,WDF5)), by = DATE]
+  return(dt_new)
+}
+
+standardize = function(dt, alpha){
+  dt_new = copy(dt)
+  for(i in 2:7) dt_new[[i]]=scale(dt_new[[i]])
+  dt_new[[2]]=alpha*dt_new[[2]]
+  return(dt_new)
+}
+```
+
+```{r}
+samplefrom = function(x,p){
+  s1 = base::sample(which(x), as.integer(p*length(which(x))))
+  s2 = base::sample(which(!x), as.integer(p*length(which(!x))))
+  return(c(s1,s2))
+}
+```
+
+```{r}
+S0 = S %>% sliding(0.01) %>% take_mean(0.5) %>% standardize(1)
+tr_idx = samplefrom(S0$CLASS, 0.7)
+tr0 = S0[tr_idx,]
+ts0 = S0[-tr_idx,]
+```
+
+```{r}
+S00 = S %>% take_mean2() %>% sliding2(0.0565) %>% standardize(1)
+tr_idx = samplefrom(S00$CLASS, 0.7)
+tr0 = S00[tr_idx,]
+ts0 = S00[-tr_idx,]
+```
+
+```{r}
+mean(tr$CLASS)
+mean(ts$CLASS)
+```
+
+```{r}
+library(class)
+sapply(1:50, function(i)mean(knn(tr[,-c(1,8)],ts[,-c(1,8)],tr$CLASS,k=i)!=ts$CLASS))
+table(knn(tr[,-c(1,8)],ts[,-c(1,8)],tr$CLASS,k=21),ts$CLASS)
+#mean(knn(tr[,-c(1,11)],ts[,-c(1,11)],tr$CLASS,k=30)!=ts$CLASS)
+```
+
+```{r}
+sapply(1:50, function(i)mean(knn(tr[,-c(1,8)],ts[,-c(1,8)],tr$CLASS,k=i)!=ts$CLASS))
+table(knn(tr[,-c(1,8)],ts[,-c(1,8)],tr$CLASS,k=21),ts$CLASS)
+```
+
+```{r}
+ggplot(S00, aes(x=PRCP, y=TDIF, color = CLASS))+geom_point()
+```
+
+```{r}
+weight = function(dt, w){
+  dt_new = copy(dt)
+  for(i in 2:7){
+    dt_new[[i]] = w[i]*dt_new[[i]]
+  }
+  return(dt_new)
+}
+
+w = c(1, 1, rep(1,5))
+
+tr = weight(tr0, w)
+ts = weight(ts0, w)
+
+sapply(1:80, function(i)mean(knn(tr[,c("PRCP","TDIF","WSF2","WSF5")],ts[,c("PRCP","TDIF","WSF2","WSF5")],tr$CLASS,k=i)!=ts$CLASS))
+```
+
+```{r}
+sapply(1:80, function(i)mean(knn.cv(weight(S0, w)[,c("PRCP","TDIF","WSF2","WSF5")], S0$CLASS, k = i)!=S0$CLASS))
+```
+
+```{r}
+er = function(w){
+  min(sapply(1:50, function(i)mean(knn.cv(weight(S0, w)[,c("PRCP","TDIF","WSF2","WSF5")], S0$CLASS, k = i)!=S0$CLASS)))
+}
+```
+
+```{r}
+w = c(1, 1, rep(1,5))
+er(w)
+
+sapply(10:50, function(t){
+  w0 = c(1, t/10, rep(1,5))
+  return(er(w0))
+})
+
+```
+
+
+```{r}
+S_out = S %>% take_mean2() %>% sliding2(0.0565)
+save(S_out, file = "Preprocessed.RData")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

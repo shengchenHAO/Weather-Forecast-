@@ -1,0 +1,287 @@
+---
+title: "svm"
+author: "Zetan Li"
+date: "April 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+load("C:/Users/zetan/Desktop/503project/Preprocessed.RData")
+library(data.table) 
+library(dplyr)  
+library(tidyr)
+library(ggplot2)
+raw_data = read.csv("C:/Users/zetan/Desktop/503project/1300141.csv", header = T, sep = ",") 
+raw_data$STATION = NULL 
+raw_data$NAME = NULL
+raw_data = as.data.table(raw_data)
+raw_data=raw_data[,.(DATE,PRCP,SNOW,TAVG,TMAX,TMIN,AWND,WSF5,WSF2),]
+
+r2= read.csv("C:/Users/zetan/Desktop/503project/1300144.csv", header = T, sep = ",") 
+r2$STATION = NULL 
+r2$NAME = NULL
+r2 = as.data.table(r2)
+r2=r2[,.(DATE,PRCP,SNOW,TAVG,TMAX,TMIN,AWND,WSF5,WSF2),]
+
+r3=rbind(raw_data,r2)
+
+data_process = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+  
+}
+
+
+r3 = data_process(r3) 
+S_out$DATE=as.factor(S_out$DATE)
+
+merge1=S_out[,.(DATE,WDF2,WDF5,CLASS)]
+afm=merge(r3,merge1,by='DATE')
+
+afm$CLASS=as.factor(as.integer(afm$CLASS))
+
+index = sample(1:nrow(afm), size = 0.7*nrow(afm))
+train1 = as.data.frame(afm[index,])  
+test1=as.data.frame(afm[-index,])  
+
+
+train=train1[,-1]
+test=test1[,-1]
+
+```
+
+```{r}
+library(sparsediscrim)
+library(e1071)
+cv_cost_svm=function(datatrain,datatest,cost,kernel,fold)
+{
+  folds = cv_partition(datatrain[,ncol(datatrain)], num_folds=fold)
+  
+  cverr = sapply(folds, function(fol) {
+ svmcv = svm(CLASS~., dat=datatrain[fol$training,],kernel=kernel, cost=cost)
+
+ svmpred = predict(svmcv, datatrain[fol$test,])
+ 
+ mean(svmpred != datatrain[fol$test,ncol(datatrain)])})
+  
+ 
+  cv_error = mean(cverr)
+  
+  
+  model=svm(CLASS~., dat=datatrain,kernel=kernel, cost=cost)
+  
+  test_error=mean(predict(model, datatest) != datatest[,ncol(datatrain)])
+  return(c(cv_error,test_error))
+}
+
+cv_cost_svm_gamma=function(datatrain,datatest,cost,kernel,fold,gamma)
+{
+  folds = cv_partition(datatrain[,ncol(datatrain)], num_folds=fold)
+  
+  cverr = sapply(folds, function(fol) {
+ svmcv = svm(CLASS~., dat=datatrain[fol$training,],kernel=kernel, cost=cost,gamma=gamma)
+
+ svmpred = predict(svmcv, datatrain[fol$test,])
+ 
+ mean(svmpred != datatrain[fol$test,ncol(datatrain)])})
+ 
+  cv_error = mean(cverr)
+  model=svm(CLASS~., dat=datatrain,kernel=kernel, cost=cost,gamma=gamma)
+  test_error=mean(predict(model, datatest) != datatest[,ncol(datatrain)])
+  return(c(cv_error,test_error))
+}
+
+
+
+library(snowfall)
+##find the best cost
+cost_range=exp(seq(-5,-4,0.01))
+##use snowfall
+sfInit(parallel=TRUE, cpus=4)
+##load needed data and function and library
+sfExport("cv_cost_svm",'cv_cost_svm_gamma','train','test')
+sfLibrary(e1071)
+sfLibrary(sparsediscrim)
+
+results=sfSapply(cost_range,function(x)cv_cost_svm(train,test,x,'radial',10))
+
+sfStop()
+
+results=cbind(as.data.frame(t(results)),cost_range)
+names(results)=c('cv_error','test_error','cost')
+gg_result=rbind(data.frame(cost=results$cost,values=results$cv_error,type='CV'),data.frame(cost=results$cost,values=results$test_error,type='Test'))
+library(ggplot2)
+ggplot(gg_result)+geom_line(aes(cost,values,color=type))+ylab('error rate')
+
+
+```
+
+
+
+```{r}
+
+
+gamma_range=gammas=exp(seq(-5,1.5,0.1))
+##use snowfall
+sfInit(parallel=TRUE, cpus=4)
+##load needed data and function and library
+sfExport("cv_cost_svm",'cv_cost_svm_gamma','train','test')
+sfLibrary(e1071)
+sfLibrary(sparsediscrim)
+results_gamma=sfSapply(gamma_range,function(x)cv_cost_svm_gamma(train,test,0.009,'radial',10,x))
+sfStop()
+
+results_gamma=cbind(as.data.frame(t(results_gamma)),gamma_range)
+names(results_gamma)=c('cv_error','test_error','gamma')
+gamma_result=rbind(data.frame(gamma=results_gamma$gamma,values=results_gamma$cv_error,type='CV'),data.frame(gamma=results_gamma$gamma,values=results_gamma$test_error,type='Test'))
+ggplot(gamma_result)+geom_line(aes(gamma,values,color=type))+ylab('error rate')
+min(gamma_redult$cv_error)
+```
+```{r}
+cv_cost_svm_gamma_conf=function(datatrain,datatest,cost,kernel,fold,gamma)
+{
+  folds = cv_partition(datatrain[,ncol(datatrain)], num_folds=fold)
+  
+  cverr = sapply(folds, function(fol) {
+ svmcv = svm(CLASS~., dat=datatrain[fol$training,],kernel=kernel, cost=cost,gamma=gamma)
+
+ svmpred = predict(svmcv, datatrain[fol$test,])
+ 
+ mean(svmpred != datatrain[fol$test,ncol(datatrain)])})
+
+  cv_error = mean(cverr)
+  model=svm(CLASS~., dat=datatrain,kernel=kernel, cost=cost,gamma=gamma)
+  test_error=mean(predict(model, datatest) != datatest[,ncol(datatest)])
+  true=datatest[,ncol(datatest)]
+  pred=predict(model, datatest)
+  print(table(pred,true))
+  return(list(c(cv_error,test_error),pred,true))
+}
+```
+
+```{r}
+results=cv_cost_svm_gamma_conf(train,test,0.05,'radial',10,0.13533528)
+```
+
+```{r}
+results[1]
+```
+
+```{r}
+results_df=data.frame(results[2],results[3],test1$DATE)
+names(results_df)=c('prediction','true','DATE')
+gg_df=rbind(data.frame(situation=results_df$prediction,type='prediction'),data.frame(situation=results_df$true,type='true'))
+ggplot(gg_df)+geom_point(aes(situation,color=type))
+```
+
+```{r}
+raw_data = read.csv("C:/Users/zetan/Desktop/503project/NY2016.csv", header = T, sep = ",") 
+raw_data$STATION = NULL 
+raw_data$NAME = NULL 
+raw_data$TDIF = raw_data$TMAX - raw_data$TMIN
+raw_data = as.data.table(raw_data)
+library(dplyr)
+data_process = function(raw_data){
+  temp = raw_data %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)   
+  temp2 = temp[,22:30] 
+  temp2[is.na(temp2)] = 0  
+  temp1 = cbind(temp[,1:21], temp$TDIF)
+  temp = cbind(temp1, temp2) 
+  temp = temp[,colMeans(is.na(temp)) == 0] 
+  return(temp)
+}
+
+data = data_process(raw_data) 
+
+create_pred = function(data){ 
+  data$RAIN = 1*(data$PRCP > 0.01) 
+  temp1 = data[-1,]$RAIN  
+  temp1 = as.data.frame(temp1)
+  temp2 = data[-nrow(data),] 
+  temp2 = as.data.frame(temp2)
+  temp2$RAIN = NULL
+  temp3 = cbind(temp2,temp1) 
+  return(temp3)
+} 
+NY = create_pred(data) 
+
+names(NY)[colnames(NY) == "temp$TDIF"] = "TDIF" 
+NY$RAIN = (NY$PRCP > 0.01) * 1 
+NY = as.data.table(NY)
+NY[,colnames(train)] 
+NY$WDCD = NY$WDF2 - NY$WDF5  
+NY=rename(NY,CLASS=RAIN)
+NY = select(NY, colnames(train)) 
+# take the whole 2016 new york data as test data
+```
+
+```{r}
+
+
+library(data.table) 
+library(dplyr)  
+library(tidyr)
+library(ggplot2)
+raw_data = read.csv("C:/Users/zetan/Desktop/503project/NY2016.csv", header = T, sep = ",") 
+raw_data$STATION = NULL 
+raw_data$NAME = NULL
+raw_data = as.data.table(raw_data)
+raw_data=raw_data[,.(DATE,PRCP,SNOW,TAVG,TMAX,TMIN,AWND,WSF5,WSF2,WDF5,WDF2),]
+
+data_process = function(raw_data){
+  temp = raw_data[,.(DATE,PRCP,SNOW,TAVG,TMAX,TMIN,AWND,WSF5,WSF2)] %>% 
+    group_by(DATE) %>%
+    summarise_all("mean", na.rm = T)  
+  
+  
+  dir_mean = function(v,d){
+  xm = mean(v*cos(d*pi/180), na.rm = T)
+  ym = mean(v*sin(d*pi/180), na.rm = T)
+  
+  if(xm^2+ym^2>0){
+    newcos = xm/sqrt(xm^2+ym^2)
+    return(acos(newcos)*sign(ym))
+  }
+  return(NA)
+  }
+  
+  temp1=raw_data[,.(WSF5,WDF5,DATE)]%>%group_by(DATE)%>%summarise(dir_mean(WSF5,WDF5))
+  temp2=raw_data[,.(WSF2,WDF2,DATE)]%>%group_by(DATE)%>%summarise(dir_mean(WSF2,WDF2))
+  
+  temp = temp[,colMeans(is.na(temp))==0] 
+  tempall=cbind(temp,temp1[2],temp2[2])
+  names(tempall)[c(10,11)]=c('WDF5','WDF2')
+  return(tempall)
+  
+}
+r4=data_process(raw_data)
+# shift 1 day
+create_pred = function(data){ 
+  data$CLASS = 1*(data$PRCP > 0.01) 
+  temp1 = data[-1,]$CLASS 
+  temp1 = as.data.frame(temp1)
+  temp2 = data[-nrow(data),] 
+  temp2 = as.data.frame(temp2)
+  temp2$CLASS = NULL
+  temp3 = cbind(temp2,temp1)
+  names(temp3)[12]='CLASS'
+  return(temp3)
+} 
+
+r5=create_pred(r4)[,-1]
+r6=cbind(r5[,1:8],NY_out[,6:8])
+r6$CLASS=as.factor(as.integer(r6$CLASS))
+nyresults=cv_cost_svm_gamma_conf(train,r6,0.05,'radial',10,0.13533528)
+```
+
+

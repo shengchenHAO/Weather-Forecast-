@@ -1,0 +1,18 @@
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {subsection}{\numberline {1.1}Purpose}{1}
+\contentsline {subsection}{\numberline {1.2}Background}{1}
+\contentsline {subsection}{\numberline {1.3}Data Source}{1}
+\contentsline {subsection}{\numberline {1.4}Attribute Explanation}{1}
+\contentsline {section}{\numberline {2}Data Exploration}{2}
+\contentsline {subsection}{\numberline {2.1}Distribution of Weather Stations}{2}
+\contentsline {subsection}{\numberline {2.2}Missing Value and the Reason to Take Mean}{3}
+\contentsline {section}{\numberline {3}Preprocessing}{3}
+\contentsline {subsection}{\numberline {3.1}Feature Engineering}{3}
+\contentsline {subsection}{\numberline {3.2}A Short Analysis of Seasonal Pattern in TDIF and PRCP}{3}
+\contentsline {subsection}{\numberline {3.3}Wind Speed and Wind Directions}{5}
+\contentsline {subsection}{\numberline {3.4}Label for Each Day}{6}
+\contentsline {section}{\numberline {4}Classification}{7}
+\contentsline {subsection}{\numberline {4.1}Random Forest}{7}
+\contentsline {subsection}{\numberline {4.2}Support Vector Machine}{8}
+\contentsline {subsection}{\numberline {4.3}$k$-Nearest Neighbors}{10}
+\contentsline {subsection}{\numberline {4.4}Applying the model to New York City}{11}

@@ -1,0 +1,7 @@
+\subsection{Method Selection}
+
+Before establishing models for prediction, we have to choose what algorithms to use in analyses.
+
+Besides common considerations, what we especially take into account is the global topology of the attribute space: because of the attributes WDF2 and WDF5, the space is in fact homeomorphic to $\mathbb R^{p-2}\times \mathbb S^1\times\mathbb S^1$ instead of $\mathbb R^p$. In this case, a hyperplane (or, more generally, an \emph{open} hypersurface) may not be able to seperate it into two \emph{disconnected} subspace.
+
+As the result, we exclude LDA, QDA and several other well-developed classification methods because an open hypersurface is always needed for these. Instead, we tend to apply methods that do not heavily depend on global topology (random forest, $k$-NN) or that classify with a \emph{closed} hypersurface (kernel SVM).

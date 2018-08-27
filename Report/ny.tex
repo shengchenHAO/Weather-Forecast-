@@ -1,0 +1,55 @@
+\subsection{Applying Models to New York City}
+
+So what about applying the same models to climate data of a different city? We consider to use the weather data from New York City in 2017 as test data with the models trained by Seattle data. The same data preprocessing approach is followed as what we did on Seattle data. After that, we only apply SVM and random forest here as they have better performance than $k$-NN. The confusion matrices are shown respectively in Table \ref{ny1} and Table \ref{ny2}.
+
+For random forest, the Type \uppercase\expandafter{\romannumeral1} error is significantly higher. Although the Type \uppercase\expandafter{\romannumeral2} error is lower, it is actually due to the model classified to many days into rain days mistakenly. The model predicted 289 days that rain in 2017 and the average raining day in New York based on historical record is 122. Overall, this model trained with Seattle data is not suitable to predict precipitation in New York. Again, we apply SVM with whole Seattle data as training set and test on New York. As shown in Table \ref{ny2}, the Type \uppercase\expandafter{\romannumeral1} error is significantly higher as well as the Type \uppercase\expandafter{\romannumeral2} error. Overall those two model performed badly in the New York data.
+
+\begin{table}[h]
+\setlength{\belowcaptionskip}{5pt}
+\caption{Confusion Matrix for New York, Random Forest}
+\label{ny1}
+\centering
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{rrrrr}
+\hline
+\hline
+ & & \multicolumn{2}{c}{True Condition} & \\
+\hline
+ & & Non-Precipitation & Precipitation & \\
+\cline{1-4}
+\multirow{2}{*}{Prediction} & {Non-Precipitation} & 62 & 13 & \\
+\cline{2-4}
+&Precipitation&176&113&\\
+\hline
+&Error Rate & 0.7394 & 0.1031 & 0.5192\\
+\cline{2-5}
+& & Type \uppercase\expandafter{\romannumeral1} & Type \uppercase\expandafter{\romannumeral2} & Overall\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\setlength{\belowcaptionskip}{5pt}
+\caption{Confusion Matrix for New York, SVM}
+\label{ny2}
+\centering
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{rrrrr}
+\hline
+\hline
+ & & \multicolumn{2}{c}{True Condition} & \\
+\hline
+ & & Non-Precipitation & Precipitation & \\
+\cline{1-4}
+\multirow{2}{*}{Prediction} & {Non-Precipitation} & 96 & 45 & \\
+\cline{2-4}
+&Precipitation&142&81&\\
+\hline
+&Error Rate & 0.596 & 0.357 & 0.5137\\
+\cline{2-5}
+& & Type \uppercase\expandafter{\romannumeral1} & Type \uppercase\expandafter{\romannumeral2} & Overall\\
+\hline
+\end{tabular}
+\end{table}
+
+There are several possible explanations for this. First, New York located on the east coast may have totally different meteorological environment compares to Seattle. So the variables and the threshold of those variables that matter in prediction may change. Second, New York has a rather imbalanced situation which has more days without precipitation (in fact, 126 days with precipitation, and 238 days without).
